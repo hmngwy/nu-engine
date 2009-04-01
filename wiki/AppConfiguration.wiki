@@ -8,35 +8,26 @@
 
 Nu Engine will load the file {{{config.php}}} by default. You can name this differently or create a new configuration class in the same directory but you will have to direct Nu Engine to load the new file by editting {{{./docroot/index.php}}}
 
-===Syntax===
-{{{
-class Config
-{
-	public $debug = true;
-	public $debugLevel = E_ALL ^ E_NOTICE;
-	public $maintenance = false;
-	
-	public $usingDB = false;
-	public $usingPDO = false;
-	
-	public $dbHost = false;
-	public $dbName = false;
-	public $dbPass = false;
-	public $dbUser = false;
-	
-	public $usingMemcache = false;
-	public $memcacheHost = 'localhost';
-	public $memcachePort = '11211';
-	
-	public $domain = 'localhost';
-	
-	public $plugins = array('templater');
-	
-	public function __construct()
-	{
-		
-	}
-}
-}}}
+===Class===
+A class named *Config* should be defined in your configuration file, the engine will instantiate this class itself and use its properties, it will also pass the instance to the registry object as {{{$registry['config']}}} so it will be available all through out the application.
 
-Not done yet..
+===Properties===
+|| variable || type || description || usage || 
+|| $debug || Boolean || if true, will turn on error reporting ||  ||
+|| $debugLevel || Integer || sets the debug level for error reporting || E_ALL ^ E_NOTICE ||
+|| $maintenance || Boolean || if true, engine will throw a maintenance exception and all pages shall display an "undergoing maintenance" page || ||
+|| $usingDB || Boolean || if true, engine will create a database connection and pass it onto the $registry variable || ||
+|| $usingPDO || Boolean || if true, engine will create the database connection using PDO || ||
+|| $dbHost || String || database host || ||
+|| $dbName || String || database name || ||
+|| $dbUser || String || database username || ||
+|| $dbPass || String || database user password || ||
+|| $usingMemcache || Boolean|| if true, engine will create a memcache connection and pass it onto the $registry variable || ||
+|| $memcacheHost || String || memcache host name || ||
+|| $memcachePort || Integer || memcache port || usually needs to be equal to 11211 ||
+|| $domain || String || the domain name where the application is located || ||
+|| $plugins || String Array || plugins that will be loaded once engine has run || array('templater') ||
+
+
+
+===Methods===
