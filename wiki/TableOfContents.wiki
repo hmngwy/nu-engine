@@ -1,7 +1,2 @@
 #summary Sidebar Table Of Contents.
-`
-
-
-
-`
-  * [UserGuide User Guide (Getting started)]
+===[UserGuide User Guide (Getting started)]===
