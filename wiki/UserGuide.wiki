@@ -1,6 +1,5 @@
 #summary Getting started with the Nu Engine.
 #labels Featured
-#sidebar TableOfContents
 
 ===Overview===
 A Nu application is composed of 7 major elements, these are the Configurations, URL Routes, Controllers, Views, Models, the Plugins, and finally the Nu Engine. 
