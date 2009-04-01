@@ -1,8 +1,8 @@
 #summary Sidebar Table Of Contents.
 
- *[UserGuide User Guide (Getting started)]*
-   * [AppConfiguration Configuration]
-   * [AppRoutes URL Routes]
-   * [AppControllers Controllers]
-   * [AppViews Views]
-   * [AppModels Models]
+*[UserGuide User Guide]*
+  * [AppConfiguration Configuration]
+  * [AppRoutes URL Routes]
+  * [AppControllers Controllers]
+  * [AppViews Views]
+  * [AppModels Models]
