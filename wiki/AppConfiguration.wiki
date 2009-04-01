@@ -1,4 +1,5 @@
 #summary Application Configuration Class.
+#sidebar TableOfContents
 
 ===Location===
 {{{./nu/application/config/}}}
