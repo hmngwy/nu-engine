@@ -7,7 +7,7 @@ A Nu application is composed of 7 major elements, these are the Configurations, 
 === Developing an MVC application ===
   * [AppConfiguration Configuration]
   * [AppRoutes URL Routes]
-  * [AppControlers Controllers]
+  * [AppControllers Controllers]
   * [AppViews Views]
   * [AppModels Models]
 
