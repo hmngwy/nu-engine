@@ -8,3 +8,34 @@
 {{{config.php}}}
 
 Nu Engine will load the file {{{config.php}}} by default. You can name this differently or create a new configuration class in the same directory but you will have to direct Nu Engine to load the new file by editting {{{./docroot/index.php}}}
+
+===Syntax===
+{{{
+class Config
+{
+	public $debug = true;
+	public $debugLevel = E_ALL ^ E_NOTICE;
+	public $maintenance = false;
+	
+	public $usingDB = false;
+	public $usingPDO = false;
+	
+	public $dbHost = false;
+	public $dbName = false;
+	public $dbPass = false;
+	public $dbUser = false;
+	
+	public $usingMemcache = false;
+	public $memcacheHost = 'localhost';
+	public $memcachePort = '11211';
+	
+	public $domain = 'localhost';
+	
+	public $plugins = array('templater');
+	
+	public function __construct()
+	{
+		
+	}
+}
+}}}
