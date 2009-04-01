@@ -1,3 +1,9 @@
 #summary Application Configuration Class.
 
-Soon..
+===Location===
+{{{./nu/application/config/}}}
+
+===File===
+{{{config.php}}}
+
+Nu Engine will load the file {{{config.php}}} by default. You can name this differently or create a new configuration class in the same directory but you will have to direct Nu Engine to load the new file by editting {{{./docroot/index.php}}}
