@@ -40,10 +40,13 @@ abstract class BaseController {
  	 * @param class registry $registry
  	 * @return void
 	 **/
-    function __construct($registry) 
+    function __construct($registry = false) 
     {
-    	$this->registry = $registry;
-    	$this->viewFile = $this->viewPath($this->registry['action']);
+    	if($registry !== false)
+    	{
+    		$this->registry = $registry;
+    		$this->viewFile = $this->viewPath($this->registry['action']);
+    	}
     }
     
     /**

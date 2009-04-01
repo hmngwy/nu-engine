@@ -149,7 +149,7 @@ class Nu
 			
 			$this->registry->set('exception', $e);
 			
-			include ENGINEDIR.'/server.controller.php';			
+			include ENGINEDIR.'/server.controller.php';
 			$server = new Server($this->registry);
 			
 			switch($e->getCode())

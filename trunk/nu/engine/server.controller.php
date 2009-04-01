@@ -2,9 +2,7 @@
 
 class Server extends BaseController
 {
-	function index()
-	{
-	}
+	function index(){}
 	
 	function not_found()
 	{
