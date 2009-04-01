@@ -31,8 +31,8 @@ A class named *Config* should be defined in your configuration file, the engine 
 You may add more properties to this class that aren't defined in this document.
 
 ===Methods===
-====`__construct()`====
-The construction function for your configuration class, this is useful if you want to set configuration values dynamically.
+====public function `__`construct()====
+  The construction function for your configuration class, this is useful if you want to set configuration values dynamically.
 
   =====Parameters=====
   _none_
