@@ -4,6 +4,16 @@
 ===Overview===
 A Nu application is composed of 7 major elements, these are the Configurations, URL Routes, Controllers, Views, Models, the Plugins, and finally the Nu Engine. 
 
+===Installation===
+  # Download latest version [http://code.google.com/p/nu-engine/downloads/list here].
+  # Extract all files to server, *under Document Root*.
+  # Set Document Root to ./docroot
+    * Or copy contents of ./docroot to your existing Document Root.
+
+====Minimum Requirements====
+  * PHP 5+
+  * Apache mod_rewrite
+
 === Developing an MVC application ===
   * [AppConfiguration Configuration]
   * [AppRoutes URL Routes]
