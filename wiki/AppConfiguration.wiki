@@ -12,7 +12,7 @@ Nu Engine will load the file {{{config.php}}} by default. You can name this diff
 A class named *Config* should be defined in your configuration file, the engine will instantiate this class itself and use its properties, it will also pass the instance to the registry object as {{{$registry['config']}}} so it will be available all through out the application.
 
 ===Properties===
-|| variable || type || description || usage || 
+|| *variable* || *data type* || *description* || *usage* || 
 || $debug || Boolean || if true, will turn on error reporting ||  ||
 || $debugLevel || Integer || sets the debug level for error reporting || E_ALL ^ E_NOTICE ||
 || $maintenance || Boolean || if true, engine will throw a maintenance exception and all pages shall display an "undergoing maintenance" page || ||
