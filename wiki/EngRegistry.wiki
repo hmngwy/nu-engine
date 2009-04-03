@@ -1,0 +1,3 @@
+#summary The global registry instance.
+
+Soon..
