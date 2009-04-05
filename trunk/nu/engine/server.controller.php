@@ -1,8 +1,18 @@
 <?php
 
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+
 class Server extends BaseController
 {
 	function index(){}
+	
+	function bad_request()
+	{
+		header('HTTP/1.1 400 Bad Request');
+		return $this->renderView('400', true);
+	}
 	
 	function not_found()
 	{

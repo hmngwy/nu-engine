@@ -1,5 +1,9 @@
 <?php
 
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+
 /**
  * class Router processes requests and returns corresponding output.
  *
@@ -9,11 +13,11 @@
  * 
  * @access public
  * @author pat ambrosio <cp.ambrosio@gmail.com>
- * @package mars
+ * @package nu
  * @version 1.0
  * @todo document class methods.
  **/
-class Router
+class Router extends CoreLib
 {
 	private $rules = array();
 	private $registry;
@@ -31,7 +35,7 @@ class Router
 	
 	function set_rules($rules)
 	{
-		$request = $this->registry['request_uri'];
+		$request = $this->parse_request_uri();
 		
 		foreach($rules as $rule)
 		{
@@ -107,7 +111,7 @@ class Router
 		
 	}
 	
-	function execute()
+	public function execute()
 	{
 		
 		if($this->match == true)
@@ -157,9 +161,38 @@ class Router
 		
 	}
 	
-	function fetch_result()
+	public function fetch_result()
 	{
 		return $this->result;
+	}
+	
+	private static function parse_request_uri()
+	{
+		$request_uri = $_SERVER['REQUEST_URI'];
+		
+		$querypos = strpos($request_uri, '?');
+		if ($querypos !== false) {
+			$request_uri = substr_replace($request_uri, '', $querypos);
+		}
+		else
+		{
+			$fragmentpos = strpos($request_uri, '#');
+			if ($fragmentpos !== false) {
+				$request_uri = substr_replace($request_uri, '', $fragmentpos);
+			}
+		}
+		
+		$request = explode('/', $request_uri);
+		array_shift($request); #REMOVE FIRST ELEMENT (always blank)
+		
+		$request_len = count($request);
+		
+		if($request_len>1) #REMOVE LAST EMPTY ELEMENT IF IT EXISTS
+		if($request[$request_len-1]=='')
+			unset($request[$request_len-1]);
+		foreach($request as &$r) $r = strtolower($r);
+		
+		return $request;
 	}
 }
 

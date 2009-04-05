@@ -1,9 +1,21 @@
 <?php
 
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+
+/**
+ * class Nu loads and runs your application
+ *
+ * @access public
+ * @author pat ambrosio <cp.ambrosio@gmail.com>
+ * @package nu
+ * @version 1.0
+ **/
 class Nu
 {
-	private $configFile = 'config.php';
-	private $routesFile = 'routes.php';
+	private $configFile;
+	private $routesFile;
 	
 	private $config;
 	private $routes;
@@ -18,10 +30,16 @@ class Nu
 		ini_set('register_globals', 0);
 		
 		/**
+		 * turns off error reporting
+		 */
+		error_reporting(0);
+		
+		/**
 		 * defines ENGINE directories.
 		 */
 		define('ENGINEDIR', NUDIR.'/engine');
 		define('PLUGINDIR', NUDIR.'/plugins');
+		define('HELPERDIR', NUDIR.'/helpers');
 		define('APPDIR', 	NUDIR.'/application');
 		
 		/**
@@ -33,6 +51,9 @@ class Nu
 		define('ROUTESDIR', 	APPDIR.'/routes');
 		define('CONFIGDIR', 	APPDIR.'/config');
 		
+		$this->setConfig('config');
+		$this->setRoutes('routes');
+		
 		/**
 		 * LOAD ENGINE LIBRARIES
 		 */
@@ -41,46 +62,50 @@ class Nu
 		include ENGINEDIR.'/registry.class.php';
 		include ENGINEDIR.'/base.controller.php';
 		include ENGINEDIR.'/base.model.php';
-		
-		/**
-		 * Loading Developer Configurations
-		 */
-		$this->loadConfig();
-		$this->loadRoutes();
 			
 		/**
 		 * Creating the registry instance that will be passed to the router.
 		 */
 		$this->registry = new registry();
-				
-		$this->registry->set('request_uri', CoreLib::parse_request()); #THE REQUEST URI
-		$this->registry->set('subdomain', CoreLib::parse_subdomain($this->config->domain)); #THE REQUEST SUBDOMAIN
+		
 	}
 	
-	public function run(){	
-		
-		/**
-		 * turns on error_reporting if set to true in developer's _config.php file.
-		 */
-		if($this->config->debug) { error_reporting($this->config->debugLevel); }
-		else { error_reporting(0); }
-		
-		#LOAD PLUGINS
-		/**
-		 * loads plugins defined
-		 * @uses variable mixed $PLUGINS defined at developer's _config.php
-		 * @uses CoreLib::load_plugin defined at core.lib.php
-		 */
-		 
-		foreach($this->config->plugins as $plugin)
-		{
-			CoreLib::load_plugin($plugin);
-		}
-		
-		######################################################################
+	public function run(){
 		
 		try
 		{
+			/**
+			 * Loading Developer Configurations
+			 */
+			$this->loadConfig();
+			$this->loadRoutes();
+			
+			/**
+			 * loads plugins defined
+			 * @uses variable mixed $PLUGINS defined at developer's _config.php
+			 * @uses CoreLib::load_plugin defined at core.lib.php
+			 */
+			foreach($this->config->plugins as $plugin)
+			{
+				CoreLib::load_plugin($plugin);
+			}
+			
+			/**
+			 * loads helpers defined
+			 * @uses variable mixed $helpers defined at developer's _config.php
+			 * @uses CoreLib::load_helper defined at core.lib.php
+			 */ 
+			foreach($this->config->helpers as $helper)
+			{
+				CoreLib::load_helper($helper);
+			}
+			
+			/**
+			 * turns on error_reporting if set to true in developer's _config.php file.
+			 */
+			if($this->config->debug) { error_reporting($this->config->debugLevel); }
+			else { error_reporting(0); }
+			
 			/**
 			 * THROWS MAINTENANCE EXCEPTION (HTTP/1.1 503 Service Unavaible)
 			 * if Constant MAINTENANCE is true in developer's config file.
@@ -149,11 +174,18 @@ class Nu
 			
 			$this->registry->set('exception', $e);
 			
-			include ENGINEDIR.'/server.controller.php';
+			include ENGINEDIR.'/server.controller.php';			
 			$server = new Server($this->registry);
 			
 			switch($e->getCode())
 			{
+				case '400': 
+					/**
+					 * If request parameters, controller, action, etc. does not exist.
+					 */
+					$this->output = $server->bad_request();
+					break;
+					
 				case '404': 
 					/**
 					 * If request parameters, controller, action, etc. does not exist.
@@ -187,6 +219,7 @@ class Nu
 			
 		}
 		
+		#TODO: make an output manager
 		/**
 		 * Echo's output if string.
 		 */
@@ -200,32 +233,33 @@ class Nu
 	
 	public function setConfig($configFile)
 	{
-		$this->configFile = $configFile;
+		$this->configFile = CONFIGDIR.'/'.$configFile.'.php';
 	}
 	
 	public function setRoutes($routesFile)
 	{
-		$this->routesFile = $routesFile;
+		$this->routesFile = ROUTESDIR.'/'.$routesFile.'.php';
 	}
 	
 	public function loadConfig()
 	{
-		if(is_readable(CONFIGDIR.'/'.$this->configFile))
+		if(is_readable($this->configFile))
 		{
-			include CONFIGDIR.'/'.$this->configFile;
+			include $this->configFile;
 			$this->config = new Config();
 		}
 		else
 		{
+			echo $this->configFile;
 			throw new Exception('APPLICATION ERROR: 1', 500);
 		}
 	}
 	
 	public function loadRoutes()
 	{
-		if(is_readable(ROUTESDIR.'/'.$this->routesFile))
+		if(is_readable($this->routesFile))
 		{
-			include ROUTESDIR.'/'.$this->routesFile;
+			include $this->routesFile;
 			$this->routes = new Routes();
 		}
 		else

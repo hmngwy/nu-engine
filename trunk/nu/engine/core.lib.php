@@ -1,44 +1,19 @@
 <?php
 
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+
 /**
  * class CoreLib holds functions needed by the mars engine.
  * 
  * @access public
  * @author pat ambrosio <cp.ambrosio@gmail.com>
- * @package mars
+ * @package nu
  * @version 1.0
  **/
 class CoreLib
 {
-	
-	public static function parse_request()
-	{
-		$request_uri = $_SERVER['REQUEST_URI'];
-		
-		$querypos = strpos($request_uri, '?');
-		if ($querypos !== false) {
-			$request_uri = substr_replace($request_uri, '', $querypos);
-		}
-		else
-		{
-			$fragmentpos = strpos($request_uri, '#');
-			if ($fragmentpos !== false) {
-				$request_uri = substr_replace($request_uri, '', $fragmentpos);
-			}
-		}
-		
-		$request = explode('/', $request_uri);
-		array_shift($request); #REMOVE FIRST ELEMENT (always blank)
-		
-		$request_len = count($request);
-		
-		if($request_len>1) #REMOVE LAST EMPTY ELEMENT IF IT EXISTS
-		if($request[$request_len-1]=='')
-			unset($request[$request_len-1]);
-		foreach($request as &$r) $r = strtolower($r);
-		
-		return $request;
-	}
 	
 	public static function parse_subdomain($domain)
 	{
@@ -68,6 +43,11 @@ class CoreLib
 	public static function load_plugin($name)
 	{
 		include PLUGINDIR.'/'.$name.'/'.$name.'.class.php';
+	}
+	
+	public static function load_helper($name)
+	{
+		include HELPERDIR.'/'.$name.'/'.$name.'.class.php';
 	}
 	
 	#FORWARDS A PAGE TO $location

@@ -1,29 +1,96 @@
 <?php 
-class Config
+
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+
+class Config extends CoreLib
 {
+	/**
+	 * turns on error reporting when true
+	 *
+	 * @access public
+	 * @var boolean
+	 **/
 	public $debug = true;
+	
+	/**
+	 * sets error reporting level
+	 *
+	 * @access public
+	 * @var integer
+	 **/
 	public $debugLevel = E_ALL;
+	
+	/**
+	 * sets the whole application to maintenance mode when true
+	 *
+	 * @access public
+	 * @var string
+	 **/
 	public $maintenance = false;
 	
+	/**
+	 * turns on db connection when true
+	 *
+	 * @access public
+	 * @var boolean
+	 **/
 	public $usingDB = false;
-	public $usingPDO = false;
 	
-	public $dbHost = false;
-	public $dbName = false;
-	public $dbPass = false;
-	public $dbUser = false;
+	/**
+	 * database connection variables
+	 *
+	 * @access public
+	 * @var mixed
+	 **/
+	public $dbConn = array( 'host' => 'localhost',
+							'name' => 'nuengine',
+							'pass' => 'secret',
+							'user' => 'root',
+							'port' => '3306');
 	
+	/**
+	 * turns on memcache connection when true
+	 *
+	 * @access public
+	 * @var boolean
+	 **/
 	public $usingMemcache = false;
-	public $memcacheHost = 'localhost';
-	public $memcachePort = '11211';
 	
-	public $domain = 'lolcathost.com';
+	/**
+	 * memcache connection variables
+	 *
+	 * @access public
+	 * @var mixed
+	 */
+	public $memcacheConn = array( 'host' => 'localhost',
+								  'port' => 11211);
 	
+	/**
+	 * the public domain where your application resides
+	 *
+	 * @access public
+	 * @var string
+	 */	
+	public $domain = 'localhost';
+	
+	/**
+	 * plugins to autoload
+	 *
+	 * @access public
+	 * @var mixed
+	 */
 	public $plugins = array('templater');
 	
-	public function __construct()
-	{
-		
-	}	
+	/**
+	 * helpers to autoload
+	 *
+	 * @access public
+	 * @var mixed
+	 */
+	public $helpers = array();
+	
+	public function __construct(){}
 }
 ?>
