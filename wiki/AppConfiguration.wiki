@@ -13,19 +13,18 @@ Nu Engine will load the file {{{config.php}}} by default. You can name this diff
 A class named *Config* should be defined in your configuration file, the engine will instantiate this class itself and use its properties, it will also pass the instance to the registry object as {{{$registry['config']}}} so it will be available all through out the application.
 
 ===Properties===
-|| *variable* || *data type* || *description* || *usage* || 
+|| *variable* || *data type* || *description* || *sample values* || 
 || $debug || Boolean || if true, will turn on error reporting ||  ||
-|| $debugLevel || Integer || sets the debug level for error reporting || E_ALL ^ E_NOTICE ||
+|| $debugLevel || Integer || sets the debug level for error reporting || {{{E_ALL ^ E_NOTICE}}} ||
 || $maintenance || Boolean || if true, engine will throw a maintenance exception and all pages shall display an "undergoing maintenance" page || ||
 || $usingDB || Boolean || if true, engine will create a database connection and pass it onto the $registry variable || ||
 || $usingPDO || Boolean || if true, engine will create the database connection using PDO || ||
-|| $dbConn || String Array || database connection variables || public $dbConn = array( 'host' => 'localhost', 'name' => 'nuengine', 'pass' => 'secret', 'user' => 'root', 'port' => '3306'); ||
+|| $dbConn || String Array || database connection variables || {{{array( 'host' => 'localhost', 'name' => 'nuengine', 'pass' => 'secret', 'user' => 'root', 'port' => '3306')}}} ||
 || $usingMemcache || Boolean|| if true, engine will create a memcache connection and pass it onto the $registry variable || ||
-|| $memcacheHost || String || memcache host name || ||
-|| $memcachePort || Integer || memcache port || usually needs to be equal to 11211 ||
+|| $memcacheConn || String Array || memcache connection variables || {{{array( 'host' => 'localhost', 'port' => '11211')}}} ||
 || $domain || String || the domain name where the application is located || ||
-|| $plugins || String Array || plugins that will be loaded once engine has run || array('templater') ||
-|| $helpers || String Array || helpers that will be loaded once engine has run || array('database') ||
+|| $plugins || String Array || plugins that will be loaded once engine has run || {{{array('templater')}}} ||
+|| $helpers || String Array || helpers that will be loaded once engine has run || {{{array('database')}}} ||
 
 You may add more properties to this class that aren't defined in this document.
 
@@ -53,4 +52,4 @@ You may add more properties to this class that aren't defined in this document.
   }
   }}}
 
-`#NOTHING FOLLOWS`
+{{{#NOTHING FOLLOWS}}}
