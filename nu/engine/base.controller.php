@@ -1,5 +1,9 @@
 <?php
 
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+	
 /**
  * class BaseController is extended by developer-defined controllers.
  *
@@ -10,10 +14,10 @@
  * @abstract class BaseController
  * @access public
  * @author pat ambrosio <cp.ambrosio@gmail.com>
- * @package mars
+ * @package nu
  * @version 1.0
  **/
-abstract class BaseController {
+abstract class BaseController extends CoreLib {
 	/**
 	 * registry variable contains global data for every request.
 	 *

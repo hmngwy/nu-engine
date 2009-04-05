@@ -1,4 +1,5 @@
 <?php
+	
 /**
 * A simple and low footprint templating engine
 * refer to @link for full documentation

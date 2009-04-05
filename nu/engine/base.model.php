@@ -1,5 +1,9 @@
 <?php
 
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+	
 /**
  * class BaseModel is extended by developer-defined models.
  *
@@ -10,10 +14,10 @@
  * @abstract class BaseModel
  * @access public
  * @author pat ambrosio <cp.ambrosio@gmail.com>
- * @package mars
+ * @package nu
  * @version 1.0
  **/
-abstract class BaseModel {
+abstract class BaseModel extends CoreLib {
 	/**
 	 * DB variable holds the handle for the db connection.
 	 *

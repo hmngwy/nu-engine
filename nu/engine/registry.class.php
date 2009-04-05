@@ -1,5 +1,9 @@
 <?php
 
+# disallows direct acces
+if(!defined('NUDIR'))
+	die();
+
 /**
  * class Registry holds all the global data needed by the application.
  *
@@ -8,10 +12,10 @@
  *
  * @access public
  * @author pat ambrosio <cp.ambrosio@gmail.com>
- * @package mars
+ * @package nu
  * @version 1.0
  **/
-class Registry implements ArrayAccess 
+class Registry extends CoreLib implements ArrayAccess 
 {
 	/**
 	 * Main array that holds the associative data.
@@ -49,7 +53,7 @@ class Registry implements ArrayAccess
 	 */
 	function remove($var) 
 	{
-	        unset($this->vars[$key]);
+	    unset($this->vars[$key]);
 	}
 	
 	/**
@@ -62,17 +66,17 @@ class Registry implements ArrayAccess
 	}
 	function offsetGet($offset) 
 	{
-	        return $this->get($offset);
+		return $this->get($offset);
 	}
 	
 	function offsetSet($offset, $value)
 	{
-	        $this->set($offset, $value);
+		$this->set($offset, $value);
 	}
 	
 	function offsetUnset($offset) 
 	{
-	        unset($this->vars[$offset]);
+	    unset($this->vars[$offset]);
 	}
 }
 
