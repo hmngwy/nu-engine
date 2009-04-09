@@ -20,8 +20,8 @@ A Nu application is composed of 7 major elements, these are the Configurations, 
   * [AppControllers Controllers]
   * [AppViews Views]
   * [AppModels Models]
-  * [AppIndex Index File]
   * [EngRegistry Registry]
+  * [AppIndex Index File]
 
 === Developing Plugins ===
 Soon..
