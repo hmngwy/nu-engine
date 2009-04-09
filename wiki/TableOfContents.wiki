@@ -1,7 +1,7 @@
 #summary Wiki Table Of Contents
 
- - Introduction<br />
- - [UserGuide User Guide]<br />
+ - *Introduction*<br />
+ - *[UserGuide User Guide]*<br />
  ---- [AppConfiguration Configuration]<br />
  ---- [AppRoutes URL Routes]<br />
  ---- [AppControllers Controllers]<br />
@@ -9,4 +9,4 @@
  ---- [AppModels Models]<br />
  ---- [EngRegistry Registry]<br />
  ---- [AppIndex Index File]<br />
- - [Benchmark Benchmarks]<br />
+ - *[Benchmark Benchmarks]*<br />
