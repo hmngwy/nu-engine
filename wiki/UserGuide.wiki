@@ -15,6 +15,10 @@ A Nu application is composed of 7 major elements, these are the Configurations, 
   * Apache mod_rewrite
 
 === Developing an MVC application ===
+Learn to write an MVC application with nu-engine in less than 10 minutes.
+  * [JumpStart Jump start, start your timers!]
+
+Learn the works, from App Configuration to the glorious Index file.
   * [AppConfiguration Configuration]
   * [AppRoutes URL Routes]
   * [AppControllers Controllers]
