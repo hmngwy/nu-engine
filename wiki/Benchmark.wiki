@@ -1,0 +1,30 @@
+#summary A comparison of different frameworks in speed.
+#labels Featured
+
+===Equipment===
+The benchmark test was run using [http://httpd.apache.org/docs/2.0/programs/ab.html ApacheBench], Version 2.3 <$Revision: 655654 $> on a machine with these specs:
+  * Windows XP PRO Version 2002 SP2
+  * Intel Pentium Dual CPU E2180 @ 2.00 GHz
+  * 2.00 GHz, 1.00 GB of RAM
+  * Seagate Barracuda 7200.11 500GB ST3500320AS HDD
+
+Using [http://www.wampserver.com/en/ WampServer]:
+  * Apache 2.2.11
+  * MySQL 5.1.32
+  * PHP 5.2.9-1 
+
+===Methodology===
+All frameworks were configure to output "Hello World!" in plain text from a view file.
+
+Each benchmark test was run using this command:
+{{{
+ab -c 10 -t 60 http://localhost/
+}}}
+
+Concurrency level set to 10, and run test for 60 seconds.
+
+===Results===
+
+|| Framework || Complete Requests || Total Transferred || HTML Transferred || Requests per second (mean) || Time per request (mean) || Time per request (mean)<br/>across all concurrent requests || Transfer rate || Failed Requests || Write Errors || 
+|| [http://code.google.com/p/nu-engine/ nu-engine] || 10409 || 1894438 b || 124908 b || 173.48 || 57.642 ms || 5.764 ms || 30.83 Kb/sec || 0 || 0 || 
+|| [http://www.codeigniter.com/ CodeIgniter] || 2454 || 495708 b || 29448 b || 40.90 || 244.499 ms || 24.450 ms || 8.07 Kb/sec || 0 || 0 || 
