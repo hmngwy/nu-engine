@@ -1,5 +1,5 @@
 #summary A comparison of different frameworks in speed.
-#labels Featured
+#labels Featured,Benchmark,CodeIgniter
 
 ===Equipment===
 The benchmark test was run using [http://httpd.apache.org/docs/2.0/programs/ab.html ApacheBench], Version 2.3 <$Revision: 655654 $> on a machine with these specs:
