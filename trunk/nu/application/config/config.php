@@ -91,6 +91,12 @@ class Config extends CoreLib
 	 */
 	public $helpers = array();
 	
-	public function __construct(){}
+	public function __construct()
+	{
+		/**
+		 * hopefully disables register_globals.
+		 */
+		ini_set('register_globals', 0);
+	}
 }
 ?>
