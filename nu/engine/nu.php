@@ -5,6 +5,32 @@ if(!defined('NUDIR'))
 	die();
 
 /**
+ * defines ENGINE directories.
+ */
+define('ENGINEDIR', NUDIR.'/engine');
+define('PLUGINDIR', NUDIR.'/plugins');
+define('HELPERDIR', NUDIR.'/helpers');
+define('APPDIR', 	NUDIR.'/application');
+
+/**
+ * defines developer directoriues.
+ */
+define('CONTROLLERDIR', APPDIR.'/controller');
+define('MODELDIR', 		APPDIR.'/model');
+define('VIEWDIR', 		APPDIR.'/view');
+define('ROUTESDIR', 	APPDIR.'/routes');
+define('CONFIGDIR', 	APPDIR.'/config');
+
+/**
+ * LOAD ENGINE LIBRARIES
+ */
+include ENGINEDIR.'/core.lib.php';
+include ENGINEDIR.'/router.class.php';
+include ENGINEDIR.'/registry.class.php';
+include ENGINEDIR.'/base.controller.php';
+include ENGINEDIR.'/base.model.php';
+
+/**
  * class Nu loads and runs your application
  *
  * @access public
@@ -12,7 +38,7 @@ if(!defined('NUDIR'))
  * @package nu
  * @version 1.0
  **/
-class Nu
+class Nu extends CoreLib
 {
 	private $configFile;
 	private $routesFile;
@@ -21,56 +47,26 @@ class Nu
 	private $routes;
 	
 	public $registry;
+	public $router;
 	
 	public function __construct()
-	{
-		/**
-		 * hopefully disables register_globals.
-		 */
-		ini_set('register_globals', 0);
-		
+	{		
 		/**
 		 * turns off error reporting
 		 */
 		error_reporting(0);
-		
-		/**
-		 * defines ENGINE directories.
-		 */
-		define('ENGINEDIR', NUDIR.'/engine');
-		define('PLUGINDIR', NUDIR.'/plugins');
-		define('HELPERDIR', NUDIR.'/helpers');
-		define('APPDIR', 	NUDIR.'/application');
-		
-		/**
-		 * defines developer directoriues.
-		 */
-		define('CONTROLLERDIR', APPDIR.'/controller');
-		define('MODELDIR', 		APPDIR.'/model');
-		define('VIEWDIR', 		APPDIR.'/view');
-		define('ROUTESDIR', 	APPDIR.'/routes');
-		define('CONFIGDIR', 	APPDIR.'/config');
-		
+			
 		$this->setConfig('config');
+		
 		$this->setRoutes('routes');
 		
 		/**
-		 * LOAD ENGINE LIBRARIES
-		 */
-		include ENGINEDIR.'/core.lib.php';
-		include ENGINEDIR.'/router.class.php';
-		include ENGINEDIR.'/registry.class.php';
-		include ENGINEDIR.'/base.controller.php';
-		include ENGINEDIR.'/base.model.php';
-			
-		/**
 		 * Creating the registry instance that will be passed to the router.
 		 */
-		$this->registry = new registry();
-		
+		$this->registry = new Registry();		
 	}
 	
-	public function run(){
+	public function run($params){
 		
 		try
 		{
@@ -87,17 +83,17 @@ class Nu
 			 */
 			foreach($this->config->plugins as $plugin)
 			{
-				CoreLib::load_plugin($plugin);
+				$this->load_plugin($plugin);
 			}
 			
 			/**
-			 * loads helpers defined
+			 * loads helpers defined 
 			 * @uses variable mixed $helpers defined at developer's _config.php
 			 * @uses CoreLib::load_helper defined at core.lib.php
 			 */ 
 			foreach($this->config->helpers as $helper)
 			{
-				CoreLib::load_helper($helper);
+				$this->load_helper($helper);
 			}
 			
 			/**
@@ -148,75 +144,44 @@ class Nu
 				$this->registry->set('memcache', $MEMCACHE);
 				
 			$this->registry->set('config', $this->config);
+			
 			/**
 			 * Creating the router instance, and passing registry instance.
 			 */
-			$router = new router($this->registry);
+			$this->router = new Router($this->registry);
 		
-			/**
-			 * Passing the router rules
-			 */
-			$router->set_rules($this->routes->rules);
+			if(isset($params['controller']) && isset($params['action']))
+			{
+				$this->router->overrideRules = true;
+				$this->router->setController($params['controller']);
+				$this->router->setAction($params['action']);
+				if(isset($params['params'])) $this->router->setParams($params['params']);
+			}
+			else #let's do this the normal way
+			{
+				/**
+				 * Passing the router rules, this determines the controller->action(params)
+				 */
+				$this->router->setRules($this->routes->rules);	
+			}
+			
 				
 			/**
 			 * Executing the request.
 			 */
-			$router->execute();
+			$this->router->execute();
 			
 			/**
 			 * Fetching the result.
 			 */
-			$this->output = $router->fetch_result();
+			$this->output = $this->router->fetch_result();
 			
 		}
 		catch(Exception $e)
 		{
 			
 			$this->registry->set('exception', $e);
-			
-			include ENGINEDIR.'/server.controller.php';			
-			$server = new Server($this->registry);
-			
-			switch($e->getCode())
-			{
-				case '400': 
-					/**
-					 * If request parameters, controller, action, etc. does not exist.
-					 */
-					$this->output = $server->bad_request();
-					break;
-					
-				case '404': 
-					/**
-					 * If request parameters, controller, action, etc. does not exist.
-					 */
-					$this->output = $server->not_found();
-					break;
-					
-				case '503':
-					/**
-					 * If site is on maintenance.
-					 */
-					$this->output = $server->service_unavailable();
-					break;
-				
-				case '500':
-					/**
-					 * If an anticipated error occured, usually thrown on purpose.
-					 */
-					$this->output = $server->internal_server_error();
-					#echo '<br /><pre>'.print_r($e).'</pre>';
-					break;
-					
-				default: 
-					/**
-					 * If an error occurs that is beyond the developer's awareness.
-					 */
-					$this->output = $server->unknown_error();
-					#echo '<br /><pre>'.print_r($e).'</pre>';
-					break;
-			}
-			
+			$this->outputException();
 		}
 		
 		#TODO: make an output manager
@@ -229,6 +194,52 @@ class Nu
 		 * Ending the Request.
 		 */
 		flush();
+	}
+	
+	public function outputException()
+	{
+		include ENGINEDIR.'/server.controller.php';			
+		$server = new Server($this->registry);
+		
+		switch($this->registry['exception']->getCode())
+		{
+			case 400: 
+				/**
+				 * If request parameters, controller, action, etc. does not exist.
+				 */
+				$this->output = $server->bad_request();
+				break;
+				
+			case 404: 
+				/**
+				 * If request parameters, controller, action, etc. does not exist.
+				 */
+				$this->output = $server->not_found();
+				break;
+				
+			case 503:
+				/**
+				 * If site is on maintenance.
+				 */
+				$this->output = $server->service_unavailable();
+				break;
+			
+			case 500:
+				/**
+				 * If an anticipated error occured, usually thrown on purpose.
+				 */
+				$this->output = $server->internal_server_error();
+				#echo '<br /><pre>'.print_r($e).'</pre>';
+				break;
+				
+			default: 
+				/**
+				 * If an error occurs that is beyond the developer's awareness.
+				 */
+				$this->output = $server->unknown_error();
+				#echo '<br /><pre>'.print_r($e).'</pre>';
+				break;
+		}
 	}
 	
 	public function setConfig($configFile)

@@ -24,8 +24,12 @@ class Router extends CoreLib
 	private $result;
 
 	private $match;
+	
 	private $controller;
 	private $action;
+	private $params;
+	
+	public $overrideRules = false;
 	
 	#ROUTER CLASS NEEDS THE REGISTRY SO IT CAN PASS IT ON TO THE CONTROLLER INSTANCE
 	function __construct($registry)
@@ -33,7 +37,7 @@ class Router extends CoreLib
     	$this->registry = $registry;
 	}
 	
-	function set_rules($rules)
+	function setRules($rules)
 	{
 		$request = $this->parse_request_uri();
 		
@@ -90,13 +94,10 @@ class Router extends CoreLib
 				$this->match = true;
 				
 				if(!isset($this->controller))
-					$this->controller = $rule['controller'];
+					$this->setController($rule['controller']);
 					
 				if(!isset($this->action))
-					$this->action = $rule['action'];
-				
-				$this->registry->set('controller', $this->controller);
-				$this->registry->set('action', $this->action);
+					$this->setAction($rule['action']);
 				
 				break;
 			}
@@ -106,7 +107,7 @@ class Router extends CoreLib
 		#STORE REQUEST PARAMS TO REGISTRY
 		if(isset($request_params))
 		{
-			$this->registry->set('request_params', $request_params);
+			$this->setParams($request_params);
 		}
 		
 	}
@@ -114,7 +115,7 @@ class Router extends CoreLib
 	public function execute()
 	{
 		
-		if($this->match == true)
+		if($this->match === true || $this->overrideRules === true)
 		{
 			$controllerfile = CONTROLLERDIR.'/'.$this->controller.'.controller.php';
 
@@ -156,7 +157,7 @@ class Router extends CoreLib
 		else
 		{
 			#WHEN NO RULE MATCHES WITH REQUEST_URI
-			throw new Exception('Page not found.', 404);
+			throw new Exception('Page not found. No Rule Matched.', 404);
 		}
 		
 	}
@@ -164,6 +165,24 @@ class Router extends CoreLib
 	public function fetch_result()
 	{
 		return $this->result;
+	}
+	
+	public function setController($controller)
+	{
+		$this->controller = $controller;
+		$this->registry->set('controller', $this->controller);
+	}
+	
+	public function setAction($action)
+	{
+		$this->action = $action;
+		$this->registry->set('action', $this->action);
+	}
+	
+	public function setParams($params)
+	{
+		$this->params = $params;
+		$this->registry->set('request_params', $params);
 	}
 	
 	private static function parse_request_uri()

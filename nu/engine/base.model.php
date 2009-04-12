@@ -19,6 +19,15 @@ if(!defined('NUDIR'))
  **/
 abstract class BaseModel extends CoreLib {
 	/**
+	 * registry variable contains global data for every request.
+	 *
+	 * @access protected
+ 	 * @see registry.class.php
+	 * @var class registry
+	 **/
+    protected $registry;
+    
+	/**
 	 * DB variable holds the handle for the db connection.
 	 *
 	 * @access protected
@@ -37,8 +46,8 @@ abstract class BaseModel extends CoreLib {
  	 * @param PDO $DB
 	 * @return void
 	 **/
-    function __construct($DB) {
-    	$this->DB = $DB;
+    function __construct($registry) {
+    	$this->registry = $registry;
     	$this->initialize();
     }
     
