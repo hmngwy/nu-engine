@@ -112,15 +112,10 @@ class Nu extends CoreLib
 			 * Creates the proper method of database connection that the
 			 * developer defined in the config file.
 			 */
-			if($this->config->usingDB && $this->config->usingPDO)
+			if($this->config->usingDB)
 			{
-				$DBCONN = new PDO('mysql:host='.$this->config->dbHost.';dbname='.$this->config->dbName, $this->config->dbUser, $this->config->dbPassword);
-				if($this->config->debug==true) $DBCONN->setAttribute(2, 1);
-			}
-			else if($this->config->usingDB && !$this->config->usingPDO)
-			{
-				$DBCONN = mysql_connect($this->config->dbHost, $this->config->dbUser, $this->config->dbPassword);
-				mysql_select_db($this->config->dbName);
+				$DBCONN = mysql_connect($this->config->dbConn['host'], $this->config->dbConn['user'], $this->config->dbConn['pass']);
+				mysql_select_db($this->config->dbConn['name']);
 			}
 			
 			/**
