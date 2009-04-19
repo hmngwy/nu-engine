@@ -44,7 +44,7 @@
 		<p id="text">The page you requested does not exist, use <a href="/">this link</a> to get back home.</p>
 	</div>
 	
-	<?php if(false): ?>
+	<?php if($this->registry['config']->debug): ?>
 	<div id="debug" class="block">
 		<pre><?php print_r($this->registry); ?></pre>
 	</div>

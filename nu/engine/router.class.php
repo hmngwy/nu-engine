@@ -19,7 +19,7 @@ if(!defined('NUDIR'))
  **/
 class Router extends CoreLib
 {
-	private $rules = array();
+	public $rules = array();
 	private $registry;
 	private $result;
 
@@ -119,7 +119,6 @@ class Router extends CoreLib
 	
 	public function execute()
 	{
-		
 		if($this->match === true || $this->overrideRules === true)
 		{
 			$controllerfile = CONTROLLERDIR.'/'.$this->controller.'.controller.php';

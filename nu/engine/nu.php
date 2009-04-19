@@ -157,10 +157,8 @@ class Nu extends CoreLib
 				/**
 				 * Passing the router rules, this determines the controller->action(params)
 				 */
-				$this->router->setRules($this->routes->rules);	
+				$this->router->setRules($this->routes->rules);
 			}
-			
-				
 			/**
 			 * Executing the request.
 			 */
