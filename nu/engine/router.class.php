@@ -104,6 +104,11 @@ class Router extends CoreLib
 		
 		}
 		
+		if($match == false)
+		{
+			throw new Exception('No Rule Matched.', 404);
+		}
+		
 		#STORE REQUEST PARAMS TO REGISTRY
 		if(isset($request_params))
 		{
@@ -139,25 +144,25 @@ class Router extends CoreLib
 					else
 					{
 						#WHEN ACTION CANNOT BE CALLED
-						throw new Exception('Action not Implemented.', 404);
+						throw new Exception('Action not Implemented.', 500);
 					}
 				}
 				else
 				{
-					throw new Exception('Controller Class not Implemented.', 404);
+					throw new Exception('Controller Class not Implemented.', 500);
 				}
 			}
 			else
 			{
 				#WHEN CONTROLLER CANNOT BE READ
-				throw new Exception('Controller File not Implemented.', 404);
+				throw new Exception('Controller File not Implemented.', 500);
 			}
 			
 		}
 		else
 		{
 			#WHEN NO RULE MATCHES WITH REQUEST_URI
-			throw new Exception('Page not found. No Rule Matched.', 404);
+			throw new Exception('Page not found. No Rule Matched.', 500);
 		}
 		
 	}

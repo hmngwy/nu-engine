@@ -44,6 +44,12 @@
 		<p id="text">We are making some changes to the server, please check back again later.</p>
 	</div>
 	
+	<?php if(false): ?>
+	<div id="debug" class="block">
+		<pre><?php print_r($this->registry); ?></pre>
+	</div>
+	<?php endif;?>
+	
 </body>
 
 </html>
