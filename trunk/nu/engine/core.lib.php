@@ -86,7 +86,6 @@ class CoreLib
 			core::forward_to(LOGIN.'/redirect_to/'.str_replace('/', '_', $redirect_to));
 		}
 	}
-    
 }
 
 ?>
