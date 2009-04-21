@@ -27,8 +27,10 @@ define('CONFIGDIR', 	APPDIR.'/config');
 include ENGINEDIR.'/core.lib.php';
 include ENGINEDIR.'/router.class.php';
 include ENGINEDIR.'/registry.class.php';
-include ENGINEDIR.'/base.controller.php';
+include ENGINEDIR.'/view.class.php';
+include ENGINEDIR.'/output.class.php';
 include ENGINEDIR.'/base.model.php';
+include ENGINEDIR.'/base.controller.php';
 
 /**
  * class Nu loads and runs your application
@@ -163,12 +165,7 @@ class Nu extends CoreLib
 			 * Executing the request.
 			 */
 			$this->router->execute();
-			
-			/**
-			 * Fetching the result.
-			 */
-			$this->output = $this->router->fetch_result();
-			
+						
 		}
 		catch(Exception $e)
 		{
@@ -177,12 +174,12 @@ class Nu extends CoreLib
 			$this->outputException();
 		}
 		
-		#TODO: make an output manager
 		/**
-		 * Echo's output if string.
+		 * Spilling the love.
 		 */
-		if (is_string($this->output) === true)
-			echo $this->output;
+		$output = $this->router->output;
+		$output->render();
+		
 		/**
 		 * Ending the Request.
 		 */
