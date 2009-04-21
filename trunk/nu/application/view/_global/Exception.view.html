@@ -4,7 +4,7 @@
 
 <head>
 
-<title>404 Page Not Found</title>
+<title><?php echo $data['title']; ?></title>
 <style type="text/css" media="screen">
 	body
 	{
@@ -40,13 +40,13 @@
 <body>
 
 	<div id="message" class="block">
-		<h1 id="subject">Page Not found</h1>
-		<p id="text">The page you requested does not exist, use <a href="/">this link</a> to get back home.</p>
+		<h1 id="subject"><?php echo $data['subject']; ?></h1>
+		<p id="text"><?php echo $data['body']; ?></p>
 	</div>
 	
-	<?php if($this->registry['config']->debug): ?>
+	<?php if($data['debug']): ?>
 	<div id="debug" class="block">
-		<pre><?php print_r($this->registry); ?></pre>
+		<pre><?php print_r($data['registry']); ?></pre>
 	</div>
 	<?php endif;?>
 	
