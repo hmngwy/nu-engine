@@ -51,7 +51,7 @@ class Nu extends CoreLib
 	public $registry;
 	public $router;
 	
-	public function __construct()
+	public function __construct($override = false)
 	{		
 		/**
 		 * turns off error reporting
@@ -62,13 +62,16 @@ class Nu extends CoreLib
 		
 		$this->setRoutes('routes');
 		
+		if($override !== false)
+			$this->override = $override;
+		
 		/**
 		 * Creating the registry instance that will be passed to the router.
 		 */
 		$this->registry = new Registry();		
 	}
 	
-	public function run($params){
+	public function run(){
 		
 		try
 		{
@@ -147,12 +150,15 @@ class Nu extends CoreLib
 			 */
 			$this->router = new Router($this->registry);
 		
-			if(isset($params['controller']) && isset($params['action']))
+			if(isset($this->override['controller']) && isset($this->override['action']))
 			{
 				$this->router->overrideRules = true;
-				$this->router->setController($params['controller']);
-				$this->router->setAction($params['action']);
-				if(isset($params['params'])) $this->router->setParams($params['params']);
+				
+				$this->router->setController($this->override['controller']);
+				$this->router->setAction($this->override['action']);
+				
+				if(isset($this->override['params'])) 
+					$this->router->setParams($this->override['params']);
 			}
 			else #let's do this the normal way
 			{
@@ -160,19 +166,26 @@ class Nu extends CoreLib
 				 * Passing the router rules, this determines the controller->action(params)
 				 */
 				$this->router->setRules($this->routes->rules);
+				#die('asd');	
 			}
 			/**
 			 * Executing the request.
 			 */
 			$this->router->execute();
-						
+			
 			$this->output = $this->router->output;
 		}
 		catch(Exception $e)
 		{
-			
 			$this->registry->set('exception', $e);
-			$this->output = $this->outputException();
+			
+			$this->router = new Router($this->registry);
+			
+			$this->outputException();
+			
+			$this->router->execute();
+			
+			$this->output = $this->router->output;
 		}
 		
 		/**
@@ -188,8 +201,9 @@ class Nu extends CoreLib
 	
 	public function outputException()
 	{
-		include ENGINEDIR.'/server.controller.php';			
-		$server = new Server($this->registry);
+		$this->router->overrideRules = true;
+		
+		$this->router->setController('Server');
 		
 		switch($this->registry['exception']->getCode())
 		{
@@ -197,32 +211,38 @@ class Nu extends CoreLib
 				/**
 				 * If request parameters, controller, action, etc. does not exist.
 				 */
-				return $server->bad_request();
+				$this->router->setAction('bad_request');
+				break;
 				
 			case 404: 
 				/**
 				 * If request parameters, controller, action, etc. does not exist.
 				 */
-				return $server->not_found();
+				$this->router->setAction('not_found');
+				break;
 				
 			case 503:
 				/**
 				 * If site is on maintenance.
 				 */
-				return $server->service_unavailable();
+				$this->router->setAction('service_unavailable');
+				break;
 			
 			case 500:
 				/**
 				 * If an anticipated error occured, usually thrown on purpose.
 				 */
-				return $server->internal_server_error();
+				$this->router->setAction('internal_server_error');
+				break;
 				
 			default: 
 				/**
 				 * If an error occurs that is beyond the developer's awareness.
 				 */
-				return $server->unknown_error();
+				$this->router->setAction('unknown_error');
+				break;
 		}
+		
 	}
 	
 	public function setConfig($configFile)

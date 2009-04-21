@@ -102,20 +102,13 @@ class View extends CoreLib
 	    
 	    $viewPath = VIEWDIR.'/'.$view_subdir.'/'.$view_name.'.view.html';
 	    
-    	if (!is_file($viewPath)) 
-    	{
-    		throw new Exception('View does not exist.', 500);
-		}
-		else
-		{
-	    	return $viewPath;
-		}	
+	    return $viewPath;
     }
     
     public function load($view_name = 'default', $global = false)
     {
     	$this->path = $this->path($view_name, $global);
-    	$this->loadContent();
+    	if(is_file($this->path)) $this->loadContent();
     }
     
     private function loadContent()

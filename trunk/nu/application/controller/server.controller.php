@@ -24,7 +24,7 @@ class Server extends BaseController
 	}
 	
 	function not_found()
-	{		
+	{
 		$this->addHeader('HTTP/1.1 404 Not Found');
 		
 		$this->view->load('Exception', true);
@@ -70,7 +70,7 @@ class Server extends BaseController
 	}
 	
 	function unknown_error()
-	{
+	{		
 		$this->addHeader('HTTP/1.1 500 Internal Server Error');
 		
 		$this->view->load('Exception', true);
@@ -79,7 +79,7 @@ class Server extends BaseController
 		$this->view->addData('subject', 'Error Encountered');
 		$this->view->addData('body', 'Woah! Well no one expected that. The page you requested has errors, use <a href="/">this link</a> to get back home while we inform the developers.');
 		$this->view->addData('debug', $this->registry['config']->debug);
-		$this->view->addData('registry', $this->registry);
+		$this->view->addData('registry', $this->registry['exception']);
 		
 		return $this->output();
 	}
