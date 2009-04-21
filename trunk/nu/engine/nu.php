@@ -166,19 +166,19 @@ class Nu extends CoreLib
 			 */
 			$this->router->execute();
 						
+			$this->output = $this->router->output;
 		}
 		catch(Exception $e)
 		{
 			
 			$this->registry->set('exception', $e);
-			$this->outputException();
+			$this->output = $this->outputException();
 		}
 		
 		/**
 		 * Spilling the love.
 		 */
-		$output = $this->router->output;
-		$output->render();
+		$this->output->render();
 		
 		/**
 		 * Ending the Request.
@@ -197,38 +197,31 @@ class Nu extends CoreLib
 				/**
 				 * If request parameters, controller, action, etc. does not exist.
 				 */
-				$this->output = $server->bad_request();
-				break;
+				return $server->bad_request();
 				
 			case 404: 
 				/**
 				 * If request parameters, controller, action, etc. does not exist.
 				 */
-				$this->output = $server->not_found();
-				break;
+				return $server->not_found();
 				
 			case 503:
 				/**
 				 * If site is on maintenance.
 				 */
-				$this->output = $server->service_unavailable();
-				break;
+				return $server->service_unavailable();
 			
 			case 500:
 				/**
 				 * If an anticipated error occured, usually thrown on purpose.
 				 */
-				$this->output = $server->internal_server_error();
-				#echo '<br /><pre>'.print_r($e).'</pre>';
-				break;
+				return $server->internal_server_error();
 				
 			default: 
 				/**
 				 * If an error occurs that is beyond the developer's awareness.
 				 */
-				$this->output = $server->unknown_error();
-				#echo '<br /><pre>'.print_r($e).'</pre>';
-				break;
+				return $server->unknown_error();
 		}
 	}
 	
