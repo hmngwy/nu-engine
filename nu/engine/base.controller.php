@@ -46,6 +46,7 @@ abstract class BaseController extends CoreLib
     {
     	$this->registry = $registry;
     	$this->headers = array();
+		
     	$this->view = new View($registry);
     }
     

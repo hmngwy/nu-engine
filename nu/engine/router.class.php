@@ -93,6 +93,7 @@ class Router extends CoreLib
 			{
 				$this->match = true;
 				
+				#these should be empty otherwise it's overriden
 				if(!isset($this->controller))
 					$this->setController($rule['controller']);
 					
@@ -161,7 +162,7 @@ class Router extends CoreLib
 		else
 		{
 			#WHEN NO RULE MATCHES WITH REQUEST_URI
-			throw new Exception('Page not found. No Rule Matched.', 500);
+			throw new Exception('Page not found. No Rule Matched.', 404);
 		}
 		
 	}
