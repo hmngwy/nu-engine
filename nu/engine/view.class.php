@@ -30,7 +30,7 @@ class View extends CoreLib
 	public function __construct($registry)
 	{
 		$this->registry = $registry;
-		$this->setPath();
+		$this->load();
 	}
 	
     public function setContent($content)
@@ -42,7 +42,7 @@ class View extends CoreLib
     /**
      * Data Manager Methods
      */
-	function addData($key, $var) 
+	public function addData($key, $var) 
 	{
         if (isset($this->data[$key]) == true) 
         {
@@ -52,7 +52,7 @@ class View extends CoreLib
         return true;
 	}
 	
-	function getData($key) 
+	public function getData($key) 
 	{
         if (isset($this->data[$key]) == false) 
         {
@@ -62,7 +62,7 @@ class View extends CoreLib
         return $this->data[$key];
 	}
 	
-	function removeData($var) 
+	public function removeData($var) 
 	{
 	    unset($this->data[$key]);
 	}
@@ -84,7 +84,7 @@ class View extends CoreLib
  	 * @return string
  	 * @throws 500 view not implemented
      **/
-    public function viewPath($view_name = 'default', $global = false)
+    public function path($view_name = 'default', $global = false)
     {    	
 	    if($view_name==='default')
 	    {
@@ -102,7 +102,6 @@ class View extends CoreLib
 	    
 	    $viewPath = VIEWDIR.'/'.$view_subdir.'/'.$view_name.'.view.html';
 	    
-	    #Actual Setting of Path
     	if (!is_file($viewPath)) 
     	{
     		throw new Exception('View does not exist.', 500);
@@ -113,9 +112,9 @@ class View extends CoreLib
 		}	
     }
     
-    public function setPath($view_name = 'default', $global = false)
+    public function load($view_name = 'default', $global = false)
     {
-    	$this->path = $this->viewPath($view_name, $global);
+    	$this->path = $this->path($view_name, $global);
     	$this->loadContent();
     }
     
