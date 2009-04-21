@@ -4,8 +4,10 @@ class Home extends BaseController
 {
 	function index()
 	{
-		$page = new templater($this->viewFile);
-		return $page->render();
+		$template = new templater($this->view->viewPath('index'));
+		$this->view->content = $template->render();
+		
+		return $this->output('e');
 	}
 }
 

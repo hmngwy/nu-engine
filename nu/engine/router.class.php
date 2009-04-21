@@ -21,7 +21,7 @@ class Router extends CoreLib
 {
 	public $rules = array();
 	private $registry;
-	private $result;
+	public $output;
 
 	private $match;
 	
@@ -137,7 +137,7 @@ class Router extends CoreLib
 					if(is_callable(array($controller, $this->action)))
 					{
 						$action = $this->action;
-						$this->result = call_user_func_array(array($controller, $this->action), $this->registry['request_params']);
+						$this->output = call_user_func_array(array($controller, $this->action), $this->registry['request_params']);
 						return true;
 					}
 					else
@@ -154,7 +154,7 @@ class Router extends CoreLib
 			else
 			{
 				#WHEN CONTROLLER CANNOT BE READ
-				throw new Exception('Controller File not Implemented.', 500);
+				throw new Exception('Controller File not Implemented. ('.$controllerfile.')', 500);
 			}
 			
 		}
@@ -164,11 +164,6 @@ class Router extends CoreLib
 			throw new Exception('Page not found. No Rule Matched.', 500);
 		}
 		
-	}
-	
-	public function fetch_result()
-	{
-		return $this->result;
 	}
 	
 	public function setController($controller)
