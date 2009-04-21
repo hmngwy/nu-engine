@@ -1,3 +1,70 @@
 #summary Application URL Routes.
 
-Soon..
+The routes file defines which controller-action corresponds to a certain request, like for example, by default '/' invokes the {{{index}}} action from {{{Home}}} controller.
+
+===Location===
+{{{./nu/application/routes/}}}
+
+===File===
+{{{routes.php}}}
+
+Nu Engine will load the routes file {{{routes.php}}} by default. You can name this differently or create a new routes class in the same directory but you will have to direct Nu Engine to load the new file by editing {{{./docroot/index.php}}}
+
+===Class===
+A class named *Routes* should be defined in your routes file, the engine will instantiate this class itself and use its properties, the instance will then be passed on to the router class for parsing.
+
+===Properties===
+|| *variable* || *data type* || *description* || *sample values* || 
+|| $rules || String Array || holds the route rules ||   ||
+
+===Usage of $rules===
+{{{
+public $rules = array(
+	
+	array(
+		'url' => array('home'),
+		'controller' => 'Home',
+		'action' => 'index'	
+	),
+	
+	array(
+		'url' => array('another', 'page'),
+		'controller' => 'Home',
+		'action' => 'page'	
+	),
+	
+	array(
+		'url' => array('open', '{action}'),
+		'controller' => 'Home'
+	),
+	
+	array(
+		'url' => array('{controller}', '{action}')
+	),
+	
+	array(
+		'url' => array('receive', '{key}'),
+		'controller' => 'Receive',
+		'action' => 'index'	
+	)
+	
+);
+}}}
+In this example, the first rule invokes Home::index() when {{{/home}}} is accessed, and the second rule invokes Home::page() when {{{/another/page}}} is accessed.
+
+The third rule uses the special {action} keyword to dynamically tell the router to invoke the action with the name that happens to be in that part of the URI, so for example we access {{{/open/page}}}, Home::page() is invoked. 
+
+The fourth rule uses both {controller} and {action} special keywords to dynamically tell the router to use the strings that happen to be in same part of the URI as the controller and action names to invoke.
+
+The last rule uses the argument format that tells the router to use the string in that part of the URI as an argument when invoking the action indicated in the same rule. If we access {{{/receive/1234}}}, Receive::index('1234') is invoked.
+
+You can use any combination of these features.
+
+===Methods===
+====public function `__`construct()====
+  The construction function for your routes class, this is useful if you want to set route rule values dynamically.
+
+  =====Parameters=====
+  _none_
+
+{{{#NOTHING FOLLOWS}}}
