@@ -11,6 +11,8 @@ if(!defined('NUDIR'))
  * cheks the request against the router rules and executes the
  * corresponding controller class and action.
  * 
+ * Based on Dennis Pallett article http://web.archive.org/web/20080128233531/www.phpit.net/article/simple-mvc-php5/3/
+ * 
  * @access public
  * @author pat ambrosio <cp.ambrosio@gmail.com>
  * @package nu
