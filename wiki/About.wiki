@@ -1,6 +1,6 @@
 #summary About the NU MVC framework.
 
-With my intense enthusiasm for the project, sleepless nights, and really hard headaches, it has come to my attention that I have left out on some attributions, and I feel real sad about it. So here it is.
+With my intense enthusiasm for the project, sleepless nights, and really hard headaches, it has come to my attention that I have left out on some attributions, and I feel really sad about it. So here it is.
 
 ===Attributions===
 The project has sprouted from PHPit.net article about writing a simple PHP MVC, the site is currently down and it seems that it has been that way for some time now. So here is [http://web.archive.org/web/20080128233521/http://www.phpit.net/article/simple-mvc-php5 the article] cached in archive.org.
