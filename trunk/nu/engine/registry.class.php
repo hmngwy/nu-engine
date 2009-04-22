@@ -11,7 +11,8 @@ if(!defined('NUDIR'))
  * then to the controllers and models.
  *
  * @access public
- * @author pat ambrosio <cp.ambrosio@gmail.com>
+ * @author Dennis Palet
+ * @link http://www.phpit.net/article/simple-mvc-php5/
  * @package nu
  * @version 1.0
  **/
