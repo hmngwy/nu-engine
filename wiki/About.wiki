@@ -1,4 +1,4 @@
-#summary About this project.
+#summary About the NU MVC framework.
 
 With my intense enthusiasm for the project, sleepless nights, and really hard headaches, it has come to my attention that I have left out on some attributions, and I feel real sad about it. So here it is.
 
