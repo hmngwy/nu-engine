@@ -4,6 +4,6 @@ With my intense enthusiasm for the project, sleepless nights, and really bad hea
 
 ===Introduction===
 
-The project has sprouted from PHPit.net article about writing a simple PHP MVC, the site is currently down and it seems that it has been that way for some time now. So here is [http://web.archive.org/web/20080128233521/http://www.phpit.net/article/simple-mvc-php5 the article] cached in archive.org.
+The project has sprouted from PHPit.net article about writing a simple PHP MVC written by Dennis Pallett, the site is currently down and it seems that it has been that way for some time now. So here is [http://web.archive.org/web/20080128233521/http://www.phpit.net/article/simple-mvc-php5 the article] cached in archive.org.
 
-The project has started from a school project and has since been further improved to become a fully fledged MVC framework without the bloat, it's written very straightforward, the way you'd think how an MVC framework would work, rather nonindustrial way of doing it but it has proved to be the most desired way to do it. 
+The project has started from a school project and has since been further improved to become a fully fledged MVC framework without the bloat, it's written very straightforward, the way you'd think how an MVC framework would work, rather nonindustrial way of doing it but it has proved to be the most desired way to do it.
