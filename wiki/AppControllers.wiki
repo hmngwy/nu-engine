@@ -37,12 +37,13 @@ By default, the view file will be the current Action's name under the view direc
 
 To change the view file, use
 {{{
-$this->view->load($viewname);
+$this->view->load($viewname, $global=false);
 }}}
 So for example, if `$this->view->load('page');` in any Action under `Home` Controller is called, your view file will be 
 {{{
 ./nu/application/view/Home/page.view.php
 }}}
+To load a Global View file (View files under the ./view/_global/ dir), use `true` as second parameter for the load function like so {{{$this->view->load('page,', true);}}}
 
 If the View file exists, it's content will be in 
 {{{
