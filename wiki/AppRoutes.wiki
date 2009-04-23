@@ -60,6 +60,8 @@ The last rule uses the argument format that tells the router to use the string i
 
 You can use any combination of these features.
 
+Note: once the router finds a match in the route rules with the requested URI, it will stop traversing the router rules array.
+
 ===Methods===
 ====public function `__`construct()====
   The construction function for your routes class, this is useful if you want to set route rule values dynamically.
