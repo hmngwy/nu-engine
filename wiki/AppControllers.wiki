@@ -59,19 +59,19 @@ Where $content is a string. Note: This will not change the View file, but the lo
 ===Loading Models===
 To load a single model, use
 {{{
-$this->loadModel($modelName);
+$this->loadModel($modelName, $handle=false);
 }}}
-
-To load all models, use 
-{{{
-$this->loadModels();
-}}}
+To load a model under a handle different from its name, use the $handle parameter.
 
 Models loaded will be available under
 {{{
 $this->model->[ModelName]
 }}}
 
+To load all models, use 
+{{{
+$this->loadModels();
+}}}
 ===Manipulating View Data===
 View data will be accessible through `$data` in your View files.
 
