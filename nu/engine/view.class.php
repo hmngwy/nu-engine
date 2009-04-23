@@ -25,7 +25,7 @@ class View extends CoreLib
 	
 	public $data = array();
 	
-	public $content;
+	private $content;
 	
 	public function __construct($registry)
 	{
@@ -36,6 +36,11 @@ class View extends CoreLib
     public function setContent($content)
     {
     	$this->content = $content;
+    }
+	
+    public function getContent()
+    {
+    	return $content;
     }
 	
     
@@ -71,8 +76,8 @@ class View extends CoreLib
      * view function returns corresponding view file for requested action.
      *
      * If param $view_name == 'default' (or empty), file loaded wil be equal to 
-     * '_view/[controller_name]/[action_name].view.html', and if overriden 
-     * '_view/[controller_name]/[$view_name].view.html'.
+     * '_view/[controller_name]/[action_name].view.php', and if overriden 
+     * '_view/[controller_name]/[$view_name].view.php'.
      *
      * If global is set to true, requested view file will be under _global, 
      * like so '_view/_global', instead of [controller_name]. Otherwise, it uses
@@ -100,7 +105,7 @@ class View extends CoreLib
 		    $view_subdir = '_global';
 	    }
 	    
-	    $viewPath = VIEWDIR.'/'.$view_subdir.'/'.$view_name.'.view.html';
+	    $viewPath = VIEWDIR.'/'.$view_subdir.'/'.$view_name.'.view.php';
 	    
 	    return $viewPath;
     }

@@ -30,6 +30,8 @@ abstract class BaseController extends CoreLib
     
     public $headers;
     
+    public $model;
+    
     public $view;
     
 	/**
@@ -48,6 +50,7 @@ abstract class BaseController extends CoreLib
     	$this->headers = array();
 		
     	$this->view = new View($registry);
+    	$this->model = new stdClass();
     }
     
     public function addHeader($string)
@@ -63,6 +66,30 @@ abstract class BaseController extends CoreLib
     	$output->mode = $mode;
     	return $output;
     }
+	
+	public function loadModel($name, $handle=false)
+	{
+		include MODELDIR.'/'.$name.'.model.php';
+		if($handle === false)
+		{
+			$this->model->$name = new $name();			
+		}
+		else
+		{
+			$this->model->$handle = new $name();	
+		}
+	}
+	
+	public function loadModels()
+	{
+		$d = dir(MODELDIR); 
+		while (false !== ($filename = $d->read())) { 
+			 if (($modelname = substr($filename, -10)) == '.model.php') { 
+			 	$this->loadModel($modelname);
+			 } 
+		} 
+		$d->close();
+	}
 
 	/**
 	 * index action is a requirement for all controllers.
