@@ -56,6 +56,17 @@ $this->view->setContent($content);
 }}}
 Where $content is a string. Note: This will not change the View file, but the loaded file string into $this->view->content;
 
+===Loading Models===
+To load a single model, use
+{{{
+$this->loadModel($modelName);
+}}}
+
+To load all models, use 
+{{{
+$this->loadModels();
+}}}
+
 ===Manipulating View Data===
 View data will be accessible through `$data` in your View files.
 
