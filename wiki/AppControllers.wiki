@@ -1,2 +1,101 @@
 #summary Application Controller Classes.
-Soon..
+#labels Phase-Implementation
+
+===Location===
+{{{./nu/application/controller/}}}
+
+===File===
+{{{[ControllerName].controller.php}}}
+
+Your controller class name should match the filename with '.controller.php' suffix, for Linux users this is case-sensitive, to be on the safe side, use case-sensitive naming.
+
+===Class===
+{{{class Home extends BaseController}}}
+
+Your controller class should extend `BaseController` and should have the default action `public function index(){}`.
+
+  ====Sample====
+  {{{
+  class Home extends BaseController
+  {
+      public function index()
+      {
+          return $this->output();
+      }
+  }
+  }}}
+
+===Adding an Action===
+To add an Action, just add a `public function` with any name, do not forget to add it to the routes definition file.
+
+===Manipulating View===
+By default, the associated View file for an Action will be 
+{{{
+./nu/application/view/[ControllerName]/[ActionName].view.html
+}}}
+By default, the view file will be the current Action's name under the view directory with the Controller's name.
+
+To change the view file, use
+{{{
+$this->view->load($viewname);
+}}}
+So for example, if `$this->view->load('page');` in any Action under `Home` Controller is called, your view file will be 
+{{{
+./nu/application/view/Home/page.view.html
+}}}
+
+If the View file exists, it's content will be in 
+{{{
+$this->view->getContent();
+}}}
+This is available so that if you want to manipulate the View filestring and just echo it afterwards (see Returning Output below), like using a third part template engine.
+
+To replace this, use
+{{{
+$this->view->setContent($content);
+}}}
+Where $content is a string. Note: This will not change the View file, but the loaded file string into $this->view->content;
+
+===Manipulating View Data===
+View data will be accessible through `$data` in your View files.
+
+To add a view data, use
+{{{
+$this->view->addData($key, $content);
+}}}
+
+To get a view data, use
+{{{
+$this->view->getData($key);
+}}}
+
+To remove a view data, use
+{{{
+$this->view->remData($key);
+}}}
+
+===Adding Headers===
+To add a header, use 
+{{{
+$this->addHeader($string);
+}}}
+Sending of headers will be deferred until output is returned to the nu-engine. (see Returning Output below). 
+
+===Returning Output===
+To end the action and respond to the request, use
+{{{
+return $this->output($mode);
+}}}
+This shall return the output data and instructions to the nu-engine, and in turn the nu-engine shall push out the data as instructed.
+
+  ====$mode paramater====
+  This tells nu-engine whether to echo the view file contents included in the output object, or include the view file directed in the output instance.
+  {{{
+  # echo content
+  return $this->output('e');
+
+  # include view file
+  return $this->output('i');
+  }}}
+
+{{{#NOTHING FOLLOWS}}}
