@@ -28,6 +28,7 @@ Your controller class should extend `BaseController` and should have the default
 ===Adding an Action===
 To add an Action, just add a `public function` with any name, do not forget to add it to the routes definition file.
 
+==View==
 ===Manipulating View===
 By default, the associated View file for an Action will be 
 {{{
@@ -57,6 +58,7 @@ $this->view->setContent($content);
 }}}
 Where $content is a string. Note: This will not change the View file, but the loaded file string into $this->view->content;
 
+==Model==
 ===Loading Models===
 To load a single model, use
 {{{
@@ -91,6 +93,7 @@ To remove a view data, use
 $this->view->remData($key);
 }}}
 
+==Output==
 ===Adding Headers===
 To add a header, use 
 {{{
