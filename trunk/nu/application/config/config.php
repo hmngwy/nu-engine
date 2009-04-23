@@ -16,11 +16,12 @@ class Config extends CoreLib
 	
 	/**
 	 * sets error reporting level
+	 * set this under the contsruction function, apparently bits and property definitions don't mix well.
 	 *
 	 * @access public
 	 * @var integer
 	 **/
-	public $debugLevel = E_ALL;
+	public $debugLevel;
 	
 	/**
 	 * sets the whole application to maintenance mode when true
@@ -97,6 +98,11 @@ class Config extends CoreLib
 		 * hopefully disables register_globals.
 		 */
 		ini_set('register_globals', 0);
+		
+		/**
+		* apparently bits and property definitions don't mix well, so set your debugLevel here.
+		*/
+		$this->debugLevel = E_ALL;
 	}
 }
 ?>

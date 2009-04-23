@@ -24,22 +24,6 @@ class CoreLib
 		return $subdomain;
 	}
 	
-	public static function load_model($name)
-	{
-		include MODELDIR.'/'.$name.'.model.php';
-	}
-	
-	public static function load_models()
-	{
-		$d = dir(MODELDIR); 
-		while (false !== ($filename = $d->read())) { 
-			 if (substr($filename, -10) == '.model.php') { 
-			 	include MODELDIR.'/'.$filename; 
-			 } 
-		} 
-		$d->close(); 
-	}
-	
 	public static function load_plugin($name)
 	{
 		include PLUGINDIR.'/'.$name.'/'.$name.'.class.php';

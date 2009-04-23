@@ -56,7 +56,7 @@ class Nu extends CoreLib
 		/**
 		 * turns off error reporting
 		 */
-		error_reporting(0);
+		#error_reporting(0);
 			
 		$this->setConfig('config');
 		
