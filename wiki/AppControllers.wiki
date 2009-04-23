@@ -67,6 +67,11 @@ To load all models, use
 $this->loadModels();
 }}}
 
+Models loaded will be available under
+{{{
+$this->model->[ModelName]
+}}}
+
 ===Manipulating View Data===
 View data will be accessible through `$data` in your View files.
 
