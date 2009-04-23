@@ -31,7 +31,7 @@ To add an Action, just add a `public function` with any name, do not forget to a
 ===Manipulating View===
 By default, the associated View file for an Action will be 
 {{{
-./nu/application/view/[ControllerName]/[ActionName].view.html
+./nu/application/view/[ControllerName]/[ActionName].view.php
 }}}
 By default, the view file will be the current Action's name under the view directory with the Controller's name.
 
@@ -41,7 +41,7 @@ $this->view->load($viewname);
 }}}
 So for example, if `$this->view->load('page');` in any Action under `Home` Controller is called, your view file will be 
 {{{
-./nu/application/view/Home/page.view.html
+./nu/application/view/Home/page.view.php
 }}}
 
 If the View file exists, it's content will be in 
