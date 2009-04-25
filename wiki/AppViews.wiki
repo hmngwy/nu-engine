@@ -20,4 +20,12 @@ View data can be accessed through the $data array, data in this array is populat
 }}}
 
 ===Global View Files===
-Global view files are view files that are available in every Controller, these files are stored under `./view/_global/`. The Controller loads global view files by using the {{{$this->view->load('page', true);}}}, notice the second parameter, when true this means that the View named `page` should be loaded from the global directory and not under the current Controller's View subdirectory.
+Global view files are view files that are available in every Controller, these files are stored under the global directory
+{{{
+./view/_global/
+}}}
+The Controller loads global view files by using the 
+{{{
+$this->view->load('page', true);
+}}}
+Notice the second parameter, when true this means that the View named `page` should be loaded from the global directory and not under the current Controller's View subdirectory.
