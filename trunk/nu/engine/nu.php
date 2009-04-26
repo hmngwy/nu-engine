@@ -32,6 +32,7 @@ include ENGINEDIR.'/output.class.php';
 include ENGINEDIR.'/base.model.php';
 include ENGINEDIR.'/base.controller.php';
 include ENGINEDIR.'/base.routerules.php';
+include ENGINEDIR.'/request.class.php';
 
 /**
  * class Nu loads and runs your application
@@ -70,7 +71,8 @@ class Nu extends CoreLib
 		/**
 		 * Creating the registry instance that will be passed to the router.
 		 */
-		$this->registry = new Registry();		
+		$this->registry = new Registry();
+		$this->registry['request'] = new Request();
 	}
 	
 	public function run(){
