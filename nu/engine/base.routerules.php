@@ -44,7 +44,6 @@ abstract class BaseRouteRules extends CoreLib
 		if(!isset($rule['methods'])) $rule['methods'] = 'all';
 		$this->rules[] = $rule;
 		
-		#CHECK IF MATCH
 		if($this->match!==true)
 			$this->match = $this->isMatch($rule);
 	}
@@ -57,6 +56,11 @@ abstract class BaseRouteRules extends CoreLib
 	public function setRoutes($rules)
 	{
 		$this->rules = $rules;
+		foreach($this->rules as $rule)
+		{
+			if($this->match !== true)
+				$this->match = $this->isMatch($rule);
+		}
 	}
 	
 	public function setController($controller)
@@ -79,9 +83,9 @@ abstract class BaseRouteRules extends CoreLib
 	
 	private function isMatch($rule)
 	{
-		$request = $this->parse_request_uri();
+		$request = $this->registry['request']->request_uri;
 		$request_length = count($request);
-		$method  = strtolower($_SERVER['REQUEST_METHOD']);
+		$method  = $this->registry['request']->method;
 		
 		#ELIMINATIVE METHOD
 		#default true, shall be set to false once proven there is no match
@@ -156,35 +160,6 @@ abstract class BaseRouteRules extends CoreLib
 		}
 		
 		return $match;
-	}
-	
-	private function parse_request_uri()
-	{
-		$request_uri = $_SERVER['REQUEST_URI'];
-		
-		$querypos = strpos($request_uri, '?');
-		if ($querypos !== false) {
-			$request_uri = substr_replace($request_uri, '', $querypos);
-		}
-		else
-		{
-			$fragmentpos = strpos($request_uri, '#');
-			if ($fragmentpos !== false) {
-				$request_uri = substr_replace($request_uri, '', $fragmentpos);
-			}
-		}
-		
-		$request = explode('/', $request_uri);
-		array_shift($request); #REMOVE FIRST ELEMENT (always blank)
-		
-		$request_len = count($request);
-		
-		if($request_len>1) #REMOVE LAST EMPTY ELEMENT IF IT EXISTS
-		if($request[$request_len-1]=='')
-			unset($request[$request_len-1]);
-		foreach($request as &$r) $r = strtolower($r);
-		
-		return $request;
 	}
 	
 	private function doesMethodMatch($request_method, $methods)
