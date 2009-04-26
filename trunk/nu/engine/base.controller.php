@@ -60,7 +60,7 @@ abstract class BaseController extends CoreLib
     
     public function output($mode = 'i')
     {
-    	$output = new Output();	
+    	$output = new Output($this->registry);	
     	$output->headers = $this->headers;
     	$output->view = $this->view;
     	$output->mode = $mode;

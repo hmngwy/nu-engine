@@ -10,10 +10,20 @@ class Output
 	public $view;
 	public $mode;
 	
-	public function render()
+	public function __construct($registry)
+	{
+		$this->registry = $registry;
+	}
+	
+	public function flushHeaders()
 	{
 		foreach($this->headers as $header)
 			header($header);
+	}
+	
+	public function render()
+	{
+		$this->flushHeaders();
 			
 		switch($this->mode)
 		{
