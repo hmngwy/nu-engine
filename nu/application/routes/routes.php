@@ -1,20 +1,27 @@
 <?php
 
-class Routes
+class RouteRules extends BaseRouteRules
 {
-	public $rules = array(
+	public function initialize()
+	{
+		$this->addRoute(
+			array(
+				'url' => array(''),
+				'controller' => 'Home',
+				'action' => 'index',
+				'methods' => array('get', 'post')
+			)
+		);
 		
-		array(
-			'url' => array(''),
-			'controller' => 'Home',
-			'action' => 'index'	
-		),
-		
-		array(
-			'url' => array('{controller}', '{action}')
-		)
-		
-	);
+		$this->addRoute(
+			array(
+				'url' => array('{controller}', '{action}'),
+				'controller' => '{controller}',
+				'action' => '{action}',
+				'methods' => 'all'
+			)
+		);
+	}
 }
 
 ?>

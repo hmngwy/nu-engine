@@ -70,6 +70,18 @@ class CoreLib
 			core::forward_to(LOGIN.'/redirect_to/'.str_replace('/', '_', $redirect_to));
 		}
 	}
+	
+	public static function isKeyword($string)
+	{
+		if(isset($string[0]))
+		{
+			if($string[0] === '{')
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 ?>
