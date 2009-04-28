@@ -26,18 +26,30 @@ abstract class BaseRouteRules extends CoreLib
 	public $params;
 	public $matchedRule;
 	
-	public function __construct($registry)
+	public function __construct($registry, $deferInit = false)
 	{
 		$this->registry = $registry;
+		
 		$this->match = false;
 		$this->controller = false;
 		$this->action = false;
 		$this->arguments = false;
 		$this->matchedRule = false;
-		$this->initialize();
+		
+		if($deferInit !== true)
+			$this->initialize();
 	}
 	
 	abstract function initialize();
+	
+	public function getRoute()
+	{
+		return array('match'		=> $this->match,
+					 'controller'	=> $this->controller,
+					 'action'		=> $this->action,
+					 'params'		=> $this->params,
+					 'matchedRule'	=> $this->matchedRule);
+	}
 	
 	public function addRoute($rule)
 	{
@@ -167,6 +179,18 @@ abstract class BaseRouteRules extends CoreLib
 		return (!isset($methods)
 				|| $methods == 'all'
 					|| ($methods != 'all' && array_search($request_method, $methods) !== false));
+	}
+	
+	public function initException()
+	{
+		$this->setController('Server');
+		$eCode = $this->registry['exception']->getCode();
+		
+		if(isset($this->registry['config']->exceptionCodes[$eCode]))
+			$this->setAction($this->registry['config']->exceptionCodes[$eCode]);
+		else
+			$this->setAction('unknown_error');
+
 	}
 }
 

@@ -11,8 +11,6 @@ if(!defined('NUDIR'))
  * cheks the request against the router rules and executes the
  * corresponding controller class and action.
  * 
- * Based on Dennis Pallett article http://web.archive.org/web/20080128233531/www.phpit.net/article/simple-mvc-php5/3/
- * 
  * @access public
  * @author pat ambrosio <cp.ambrosio@gmail.com>
  * @package nu
@@ -24,46 +22,44 @@ class Router extends CoreLib
 	private $registry;
 	private $output;
 	
-	public $routeRules;
+	public $route;
 	public $overrideRules = false;
 	
 	#ROUTER CLASS NEEDS THE REGISTRY SO IT CAN PASS IT ON TO THE CONTROLLER INSTANCE
 	public function __construct($registry)
 	{
     	$this->registry = $registry;
+    	$this->route = $this->registry['route'];
 	}
 	
-	public function execute($routeRules)
+	public function execute()
 	{
-		$this->routeRules = $routeRules;
-		
-		#die(print_r($this->routeRules, true));
-		if($this->routeRules->match === true || $this->overrideRules === true)
+		if($this->route['match'] === true || $this->overrideRules === true)
 		{
-			$controllerfile = CONTROLLERDIR.'/'.$this->routeRules->controller.'.controller.php';
+			$controllerfile = CONTROLLERDIR.'/'.$this->route['controller'].'.controller.php';
 
 			# CHECK IF FILE IS READABLE
 			if(is_readable($controllerfile))
 			{
 				include $controllerfile;
 				
-				if (class_exists($this->routeRules->controller)) 
+				if (class_exists($this->route['controller'])) 
 				{
 					#INITIALIZE CONTROLLER, GIVE THE CONTROLLER CLASS A HOLD OF THE REGISTRY
-					$controller_class = $this->routeRules->controller;
+					$controller_class = $this->route['controller'];
 					$controller = new $controller_class($this->registry);
 					
-					if(is_callable(array($controller, $this->routeRules->action)))
+					if(is_callable(array($controller, $this->route['action'])))
 					{
-						$action = $this->routeRules->action;
-						$this->output = call_user_func_array(array($controller, $this->routeRules->action), $this->routeRules->params);
+						$action = $this->route['action'];
+						$this->output = call_user_func_array(array($controller, $this->route['action']), $this->route['params']);
 						#MAGIC
 						return $this->output;
 					}
 					else
 					{
 						#WHEN ACTION CANNOT BE CALLED BECAUSE OF USER INPUT
-						if($this->isKeyword($this->routeRules->matchedRule['action']))
+						if($this->isKeyword($this->route['matchedRule']['action']))
 							$code = 404;
 						else #IF BECAUSE OF DEVELOPER INPUT
 							$code = 500;
@@ -78,7 +74,7 @@ class Router extends CoreLib
 			else
 			{
 				#WHEN CONTROLLER CANNOT BE READ BECAUSE OF USER INPUT
-				if($this->isKeyword($this->routeRules->matchedRule['controller']))
+				if($this->isKeyword($this->route['matchedRule']['controller']))
 					$code = 404;
 				else #IF BECAUSE OF DEVELOPER INPUT
 					$code = 500;

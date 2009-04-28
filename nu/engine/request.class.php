@@ -9,10 +9,14 @@ class Request extends CoreLib
 	public $request_uri;
 	public $method;
 	
-	public function __construct()
+	public function __construct($domain)
 	{
 		$this->request_uri = $this->parse_request_uri();
 		$this->method = strtolower($_SERVER['REQUEST_METHOD']);
+		$this->subdomain = $this->parse_subdomain($domain);
+		$this->post = $_POST;
+		$this->get = $_GET;
+		$this->request_headers = (function_exists('getallheaders')) ? getallheaders() : array() ;
 	}
 	
 	private function parse_request_uri()
@@ -42,6 +46,15 @@ class Request extends CoreLib
 		foreach($request as &$r) $r = strtolower($r);
 		
 		return $request;
+	}
+	
+	public function parse_subdomain($domain)
+	{
+		$host = explode('.', $_SERVER['HTTP_HOST']);
+		$subdomain = rtrim(str_replace($domain, '', $_SERVER['HTTP_HOST']), '.');
+		$subdomain = ($subdomain == '') ? 'www' : $subdomain ;
+		
+		return $subdomain;
 	}
 }
 
