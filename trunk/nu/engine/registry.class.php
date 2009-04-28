@@ -52,7 +52,7 @@ class Registry extends CoreLib implements ArrayAccess
 	/**
 	 * Removes a variable from the array.
 	 */
-	function remove($var) 
+	function remove($key) 
 	{
 	    unset($this->vars[$key]);
 	}

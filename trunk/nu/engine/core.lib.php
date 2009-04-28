@@ -12,30 +12,16 @@ if(!defined('NUDIR'))
  * @package nu
  * @version 1.0
  **/
-class CoreLib
+abstract class CoreLib
 {
 	
-	public static function parse_subdomain($domain)
+	public function loadPlugin($name, $handle=false)
 	{
-		$host = explode('.', $_SERVER['HTTP_HOST']);
-		$subdomain = rtrim(str_replace($domain, '', $_SERVER['HTTP_HOST']), '.');
-		$subdomain = ($subdomain == '') ? 'www' : $subdomain ;
-		
-		return $subdomain;
-	}
-	
-	public static function load_plugin($name)
-	{
-		include PLUGINDIR.'/'.$name.'/'.$name.'.class.php';
-	}
-	
-	public static function load_helper($name)
-	{
-		include HELPERDIR.'/'.$name.'/'.$name.'.class.php';
+		include_once PLUGINDIR.'/'.$name.'/'.$name.'.class.php';
 	}
 	
 	#FORWARDS A PAGE TO $location
-	public static function forward_to($location, $permanent = false)
+	public function forward_to($location, $permanent = false)
 	{
 		if(!$permanent) header('HTTP/1.1 302 Found');
 		else header('HTTP/1.1 301 Moved Permanently');
@@ -46,7 +32,7 @@ class CoreLib
 	#TODO: Move this to a separate class
 	#$bool:true FORWARDS PAGE TO $loc WHEN AUTHENTICATED
 	#$bool:false FORWARDS PAGE TO $loc WHEN NOT AUTHENTICATED
-	public static function authenticated_redir($bool, $loc)
+	public function authenticated_redir($bool, $loc)
 	{
 		if(isset($_SESSION['authenticated']) && $bool)
 		{
@@ -63,7 +49,7 @@ class CoreLib
 	
 	#TODO: Move this to a separate class
 	#REQUESTS FOR LOGIN WHEN NOT AUTHENTICATED
-	public static function require_authentication($redirect_to)
+	public function require_authentication($redirect_to)
 	{
 		if(!isset($_SESSION['authenticated']))
 		{
@@ -71,7 +57,7 @@ class CoreLib
 		}
 	}
 	
-	public static function isKeyword($string)
+	public function isKeyword($string)
 	{
 		if(isset($string[0]))
 		{
@@ -82,6 +68,12 @@ class CoreLib
 		}
 		return false;
 	}
+	
+	public function debug($var)
+	{
+		die('<pre>'.var_dump($var).'</pre>');
+	}
+	
 }
 
 ?>

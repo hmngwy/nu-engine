@@ -31,7 +31,6 @@ abstract class BaseModel extends CoreLib {
 	 * DB variable holds the handle for the db connection.
 	 *
 	 * @access protected
-	 * @var class PDO
 	 **/
     protected $DB;
 

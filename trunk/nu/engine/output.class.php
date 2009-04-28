@@ -24,7 +24,7 @@ class Output
 	public function render()
 	{
 		$this->flushHeaders();
-			
+		
 		switch($this->mode)
 		{
 			case 'e':

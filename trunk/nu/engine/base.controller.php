@@ -47,10 +47,17 @@ abstract class BaseController extends CoreLib
     public function __construct($registry) 
     {
     	$this->registry = $registry;
+    	$this->config = $this->registry['config'];
     	$this->headers = array();
 		
     	$this->view = new View($registry);
     	$this->model = new stdClass();
+    	$this->helper = new stdClass();
+    	
+		foreach($this->config->helpers as $helper)
+		{
+			$this->load_helper($helper);
+		}
     }
     
     public function addHeader($string)
@@ -89,6 +96,20 @@ abstract class BaseController extends CoreLib
 			 } 
 		} 
 		$d->close();
+	}
+	
+	public function loadHelper($name, $handle=false)
+	{
+		include_once HELPERDIR.'/'.$name.'/'.$name.'.helper.php';
+		
+		if($handle === false)
+		{
+			$this->helper->$name = new $name();			
+		}
+		else
+		{
+			$this->helper->$handle = new $name();	
+		}
 	}
 
 	/**

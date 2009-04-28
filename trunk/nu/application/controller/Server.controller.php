@@ -3,7 +3,16 @@
 # disallows direct acces
 if(!defined('NUDIR'))
 	die();
-
+/**
+ * class Server is the controller for any Errors or server
+ * messages that will be sent to the user.
+ * 
+ * Don't change the action names.
+ * Don't change the headers.
+ *
+ * @package default
+ * @author Ambrosio
+ **/
 class Server extends BaseController
 {
 	function index(){}

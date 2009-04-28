@@ -52,7 +52,10 @@ class Nu extends CoreLib
 	
 	public $registry;
 	public $router;
-	public $exceptionRouter;
+	public $routeRules;
+	
+	public $eRouter;
+	public $eRouteRules;
 	
 	public function __construct($override = false)
 	{		
@@ -72,7 +75,6 @@ class Nu extends CoreLib
 		 * Creating the registry instance that will be passed to the router.
 		 */
 		$this->registry = new Registry();
-		$this->registry['request'] = new Request();
 	}
 	
 	public function run(){
@@ -85,6 +87,12 @@ class Nu extends CoreLib
 			$this->loadConfig();
 			$this->loadRoutes();
 			
+			$this->config = new Config();
+				
+			$this->registry->set('config', $this->config);
+			
+			$this->registry['request'] = new Request($this->config->domain);
+
 			/**
 			 * loads plugins defined
 			 * @uses variable mixed $PLUGINS defined at developer's _config.php
@@ -92,17 +100,7 @@ class Nu extends CoreLib
 			 */
 			foreach($this->config->plugins as $plugin)
 			{
-				$this->load_plugin($plugin);
-			}
-			
-			/**
-			 * loads helpers defined 
-			 * @uses variable mixed $helpers defined at developer's _config.php
-			 * @uses CoreLib::load_helper defined at core.lib.php
-			 */ 
-			foreach($this->config->helpers as $helper)
-			{
-				$this->load_helper($helper);
+				$this->loadPlugin($plugin);
 			}
 			
 			/**
@@ -146,27 +144,16 @@ class Nu extends CoreLib
 				
 			if($this->config->usingMemcache)
 				$this->registry->set('memcache', $MEMCACHE);
-				
-			$this->registry->set('config', $this->config);
 			
-			
-			
-			$this->routeRules = new RouteRules($this->registry);
-			
-			$this->registry['controller'] = $this->routeRules->controller;
-			$this->registry['action'] = $this->routeRules->action;
-			$this->registry['arguments'] = $this->routeRules->arguments;
 			
 			/**
-			 * Creating the router instance, and passing registry instance.
+			 * Creating the RouterRules instance
 			 */
-			$this->router = new Router($this->registry);
+			$this->routeRules = new RouteRules($this->registry);
 			
 			#OVERRIDE ROUTES IF SET
-			if(isset($this->override['controller']) && isset($this->override['action']))
+			if($override = isset($this->override))
 			{
-				$this->router->overrideRules = true;
-				
 				$this->routeRules->setController($this->override['controller']);
 				$this->routeRules->setAction($this->override['action']);
 				
@@ -174,21 +161,42 @@ class Nu extends CoreLib
 					$this->routeRules->setParams($this->override['params']);
 			}
 			
+			$finalRoute = $this->routeRules->getRoute();
 			
+			/**
+			 * Registering the final delagate instructions,
+			 */
+			$this->registry['route'] = $finalRoute;
+			
+			/**
+			 * Creating the Router instance, passing final registry instance
+			 * NO MORE CHANGES TO THE REGISTRY AFTER THIS LINE
+			 */
+			$this->router = new Router($this->registry);
+			
+			if($override)
+				$this->router->overrideRules = true;
+			 
 			/**
 			 * Executing the request.
 			 */
-			$this->output = $this->router->execute($this->routeRules);
+			$this->output = $this->router->execute();
 		}
 		catch(Exception $e)
 		{
-			$this->registry->set('exception', $e);
+			$this->registry['exception'] = $e;
 			
-			$this->exceptionRouter = new Router($this->registry);
+			$this->registry->remove('route');
 			
-			$this->outputException();
+    		$this->registry['route'] = array('match'		=> true,
+    										 'controller'	=> $this->config->exceptionController,
+											 'action'		=> $this->config->exceptionCodes[$this->registry['exception']->getCode()],
+											 'params'		=> array());
+    		
+			$this->eRouter = new Router($this->registry);
+			$this->eRouter->overrideRules = true;
 			
-			$this->output = $this->exceptionRouter->execute($this->routeRules);
+			$this->output = $this->eRouter->execute();
 		}
 		
 		/**
@@ -202,52 +210,6 @@ class Nu extends CoreLib
 		flush();
 	}
 	
-	public function outputException()
-	{
-		$this->exceptionRouter->overrideRules = true;
-		
-		$this->routeRules->setController('Server');
-		
-		switch($this->registry['exception']->getCode())
-		{
-			case 400: 
-				/**
-				 * If request parameters, controller, action, etc. does not exist.
-				 */
-				$this->routeRules->setAction('bad_request');
-				break;
-				
-			case 404: 
-				/**
-				 * If request parameters, controller, action, etc. does not exist.
-				 */
-				$this->routeRules->setAction('not_found');
-				break;
-				
-			case 503:
-				/**
-				 * If site is on maintenance.
-				 */
-				$this->routeRules->setAction('service_unavailable');
-				break;
-			
-			case 500:
-				/**
-				 * If an anticipated error occured, usually thrown on purpose.
-				 */
-				$this->routeRules->setAction('internal_server_error');
-				break;
-				
-			default: 
-				/**
-				 * If an error occurs that is beyond the developer's awareness.
-				 */
-				$this->routeRules->setAction('unknown_error');
-				break;
-		}
-		
-	}
-	
 	public function setConfig($configFile)
 	{
 		$this->configFile = CONFIGDIR.'/'.$configFile.'.php';
@@ -258,12 +220,11 @@ class Nu extends CoreLib
 		$this->routesFile = ROUTESDIR.'/'.$routesFile.'.php';
 	}
 	
-	public function loadConfig()
+	private function loadConfig()
 	{
 		if(is_readable($this->configFile))
 		{
 			include $this->configFile;
-			$this->config = new Config();
 		}
 		else
 		{
@@ -272,7 +233,7 @@ class Nu extends CoreLib
 		}
 	}
 	
-	public function loadRoutes()
+	private function loadRoutes()
 	{
 		if(is_readable($this->routesFile))
 		{
