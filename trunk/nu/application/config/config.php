@@ -15,8 +15,9 @@ class Config extends CoreLib
 	public $debug = true;
 	
 	/**
-	 * sets error reporting level
-	 * set this under the contsruction function, apparently bits and property definitions don't mix well.
+	 * sets error reporting level.
+	 * set this under the contsruction function, apparently 
+	 * bits and property definitions don't mix well.
 	 *
 	 * @access public
 	 * @var integer
@@ -92,8 +93,16 @@ class Config extends CoreLib
 	 */
 	public $helpers = array();
 	
+	public $exceptionController = 'Server';
+	
+	public $exceptionCodes = array( 400 => 'bad_request',
+									404 => 'not_found',
+									503 => 'service_unavailable',
+									500 => 'internal_server_error');
+	
 	public function __construct()
-	{
+	{	
+		#YOU CAN WRITE ANYTHING HERE
 		/**
 		 * hopefully disables register_globals.
 		 */
