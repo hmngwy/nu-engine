@@ -36,7 +36,7 @@ abstract class BaseRouteRules extends CoreLib
 		$this->arguments = false;
 		$this->matchedRule = false;
 		
-		if($deferInit !== true)
+		if(!$deferInit)
 			$this->initialize();
 	}
 	
@@ -78,19 +78,16 @@ abstract class BaseRouteRules extends CoreLib
 	public function setController($controller)
 	{
 		$this->controller = $controller;
-		$this->registry->set('controller', $this->controller);
 	}
 	
 	public function setAction($action)
 	{
 		$this->action = $action;
-		$this->registry->set('action', $this->action);
 	}
 	
 	public function setParams($arguments)
 	{
 		$this->params = $params;
-		$this->registry->set('request_params', $params);
 	}
 	
 	private function isMatch($rule)
