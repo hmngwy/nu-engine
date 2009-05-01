@@ -93,12 +93,12 @@ class View extends CoreLib
     {    	
 	    if($view_name==='default')
 	    {
-	    	$view_name = $this->registry['action'];
+	    	$view_name = $this->registry['route']['action'];
 	    }
 	    
 	    if($global === false)
 	    {
-		    $view_subdir = $this->registry['controller'];
+		    $view_subdir = $this->registry['route']['controller'];
 	    }
 	    else
 	    {

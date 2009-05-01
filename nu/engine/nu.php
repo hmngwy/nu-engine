@@ -11,6 +11,7 @@ define('ENGINEDIR', NUDIR.'/engine');
 define('PLUGINDIR', NUDIR.'/plugins');
 define('HELPERDIR', NUDIR.'/helpers');
 define('APPDIR', 	NUDIR.'/application');
+define('CACHEDIR', 	'../cache');
 
 /**
  * defines developer directoriues.
@@ -88,20 +89,7 @@ class Nu extends CoreLib
 			$this->loadRoutes();
 			
 			$this->config = new Config();
-				
 			$this->registry->set('config', $this->config);
-			
-			$this->registry['request'] = new Request($this->config->domain);
-
-			/**
-			 * loads plugins defined
-			 * @uses variable mixed $PLUGINS defined at developer's _config.php
-			 * @uses CoreLib::load_plugin defined at core.lib.php
-			 */
-			foreach($this->config->plugins as $plugin)
-			{
-				$this->loadPlugin($plugin);
-			}
 			
 			/**
 			 * turns on error_reporting if set to true in developer's _config.php file.
@@ -110,11 +98,35 @@ class Nu extends CoreLib
 			else { error_reporting(0); }
 			
 			/**
+			 * Registering the request instance
+			 */
+			$this->registry['request'] = new Request($this->config->domain);
+			
+			/**
 			 * THROWS MAINTENANCE EXCEPTION (HTTP/1.1 503 Service Unavaible)
-			 * if Constant MAINTENANCE is true in developer's config file.
+			 * if MAINTENANCE is true in developer's config file.
 			 */
 			if($this->config->maintenance) throw new Exception('SITE ON MAINTENANCE', 503);
 			
+			/**
+			 * Setting up the route
+			 */
+			if(isset($this->override))
+			{
+				$this->routeRules = new RouteRules($this->registry, true);
+				
+				$this->routeRules->setController($this->override['controller']);
+				$this->routeRules->setAction($this->override['action']);
+				
+				if(isset($this->override['params'])) 
+					$this->routeRules->setParams($this->override['params']);
+			}
+			else
+			{
+				$this->routeRules = new RouteRules($this->registry);
+			}
+			#TODO CHECK IF THE ROUTE IS CACHEABLE
+
 			/**
 			 * Creates the proper method of database connection that the
 			 * developer defined in the config file.
@@ -147,26 +159,20 @@ class Nu extends CoreLib
 			
 			
 			/**
-			 * Creating the RouterRules instance
+			 * Registering the final delegate instructions,
 			 */
-			$this->routeRules = new RouteRules($this->registry);
+			$this->registry['route'] = $this->routeRules->getRoute();
 			
-			#OVERRIDE ROUTES IF SET
-			if($override = isset($this->override))
-			{
-				$this->routeRules->setController($this->override['controller']);
-				$this->routeRules->setAction($this->override['action']);
-				
-				if(isset($this->override['params'])) 
-					$this->routeRules->setParams($this->override['params']);
-			}
-			
-			$finalRoute = $this->routeRules->getRoute();
 			
 			/**
-			 * Registering the final delagate instructions,
+			 * loads plugins defined
+			 * @uses variable mixed $PLUGINS defined at developer's _config.php
+			 * @uses CoreLib::load_plugin defined at core.lib.php
 			 */
-			$this->registry['route'] = $finalRoute;
+			foreach($this->config->plugins as $plugin)
+			{
+				$this->loadPlugin($plugin);
+			}
 			
 			/**
 			 * Creating the Router instance, passing final registry instance
@@ -174,7 +180,7 @@ class Nu extends CoreLib
 			 */
 			$this->router = new Router($this->registry);
 			
-			if($override)
+			if(isset($this->override))
 				$this->router->overrideRules = true;
 			 
 			/**
@@ -186,11 +192,15 @@ class Nu extends CoreLib
 		{
 			$this->registry['exception'] = $e;
 			
+			$code = $this->registry['exception']->getCode();
+			
+			$this->registry['oRoute'] = $this->registry['route'];
+			
 			$this->registry->remove('route');
 			
     		$this->registry['route'] = array('match'		=> true,
     										 'controller'	=> $this->config->exceptionController,
-											 'action'		=> $this->config->exceptionCodes[$this->registry['exception']->getCode()],
+											 'action'		=> $this->config->exceptionCodes[$code],
 											 'params'		=> array());
     		
 			$this->eRouter = new Router($this->registry);
@@ -228,7 +238,6 @@ class Nu extends CoreLib
 		}
 		else
 		{
-			echo $this->configFile;
 			throw new Exception('APPLICATION ERROR: 1', 500);
 		}
 	}
