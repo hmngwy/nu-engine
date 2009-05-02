@@ -54,6 +54,8 @@ abstract class BaseRouteRules extends CoreLib
 	public function addRoute($rule)
 	{
 		if(!isset($rule['methods'])) $rule['methods'] = 'all';
+		if(!isset($rule['cache'])) $rule['cache'] = false;
+		
 		$this->rules[] = $rule;
 		
 		if($this->match!==true)
