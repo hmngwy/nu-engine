@@ -24,9 +24,7 @@ class Output
 	public function render()
 	{
 		$this->flushHeaders();
-		
-		ob_start();
-		
+			
 		switch($this->mode)
 		{
 			case 'e':
@@ -39,15 +37,6 @@ class Output
 				include $this->view->path;
 				break;
 		}
-		
-		$outputPath		= CACHEDIR.'/'.md5($_SERVER['REQUEST_URI']).'.html';
-		$outputString	= ob_get_contents();
-		
-		$fp = fopen($outputPath, 'w'); 
-		fwrite($fp, $outputString); 
-		fclose($fp);
-		
-		ob_end_flush();
 	}
 }
 

@@ -9,7 +9,8 @@ class RouteRules extends BaseRouteRules
 				'url' => array(''),
 				'controller' => 'Home',
 				'action' => 'index',
-				'methods' => array('get', 'post')
+				'methods' => array('get', 'post'),
+				'cache' => true
 			)
 		);
 		

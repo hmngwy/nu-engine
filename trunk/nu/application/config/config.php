@@ -33,6 +33,22 @@ class Config extends CoreLib
 	public $maintenance = false;
 	
 	/**
+	 * sets file caching on routes that implement it
+	 *
+	 * @access public
+	 * @var boolean
+	 **/
+	public $useCaching = true;
+	
+	/**
+	 * cache lifetime (seconds)
+	 *
+	 * @access public
+	 * @var integer
+	 **/
+	public $cacheLifeTime = 5;
+	
+	/**
 	 * turns on db connection when true
 	 *
 	 * @access public

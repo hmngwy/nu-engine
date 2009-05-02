@@ -11,7 +11,7 @@ define('ENGINEDIR', NUDIR.'/engine');
 define('PLUGINDIR', NUDIR.'/plugins');
 define('HELPERDIR', NUDIR.'/helpers');
 define('APPDIR', 	NUDIR.'/application');
-define('CACHEDIR', 	'../cache');
+define('CACHEDIR', 	NUDIR.'/cache');
 
 /**
  * defines developer directoriues.
@@ -34,6 +34,7 @@ include ENGINEDIR.'/base.model.php';
 include ENGINEDIR.'/base.controller.php';
 include ENGINEDIR.'/base.routerules.php';
 include ENGINEDIR.'/request.class.php';
+include ENGINEDIR.'/cache.class.php';
 
 /**
  * class Nu loads and runs your application
@@ -113,20 +114,43 @@ class Nu extends CoreLib
 			 */
 			if(isset($this->override))
 			{
+				#WHEN NU IS OVERRIDEN
 				$this->routeRules = new RouteRules($this->registry, true);
 				
 				$this->routeRules->setController($this->override['controller']);
 				$this->routeRules->setAction($this->override['action']);
 				
-				if(isset($this->override['params'])) 
+				if(isset($this->override['params']))
 					$this->routeRules->setParams($this->override['params']);
 			}
 			else
 			{
+				#NORMAL WAY
 				$this->routeRules = new RouteRules($this->registry);
 			}
-			#TODO CHECK IF THE ROUTE IS CACHEABLE
-
+			
+			#IS THIS REQUEST CACHEABLE
+			$isCacheable = ($this->config->useCaching && 
+							($this->routeRules->matchedRule['cache'] == true 
+							|| is_array($this->routeRules->matchedRule['cache'])));
+			
+			#EXECUTE ANY CACHING
+			if($isCacheable)
+			{
+				$this->cache = new Cache(md5($_SERVER['REQUEST_URI']), $this->config->cacheLifeTime);
+				if($this->cache->valid)
+				{
+					$this->cache->outputCache();
+					
+					#End properly now that we have output.
+					$this->end();
+				}
+				else
+				{
+					$this->cache->start();
+				}
+			}
+			
 			/**
 			 * Creates the proper method of database connection that the
 			 * developer defined in the config file.
@@ -135,6 +159,7 @@ class Nu extends CoreLib
 			{
 				$DBCONN = mysql_connect($this->config->dbConn['host'], $this->config->dbConn['user'], $this->config->dbConn['pass']);
 				mysql_select_db($this->config->dbConn['name']);
+				$this->registry->set('db', $DBCONN);
 			}
 			
 			/**
@@ -146,17 +171,9 @@ class Nu extends CoreLib
 				#MEMCACHE INITIALIZATION
 				$MEMCACHE = new Memcache;
 				$MEMCACHE->connect($this->config->memcacheHost, $this->config->memcachePort);
-			}
-			
-			/**
-			 * Storing Connections to the Registry
-			 */
-			if($this->config->usingDB)
-				$this->registry->set('db', $DBCONN);
-				
-			if($this->config->usingMemcache)
 				$this->registry->set('memcache', $MEMCACHE);
-			
+			}
+					
 			
 			/**
 			 * Registering the final delegate instructions,
@@ -187,9 +204,25 @@ class Nu extends CoreLib
 			 * Executing the request.
 			 */
 			$this->output = $this->router->execute();
+		
+			/**
+			 * Love.
+			 */
+			$this->output->render();
+			
+			if($isCacheable)
+				if(!$this->cache->valid)
+					$this->cache->end();
+			
 		}
 		catch(Exception $e)
 		{
+			#stop any ongoing caching
+			if(isset($this->cache))
+			{
+				ob_end_flush();
+			}
+			
 			$this->registry['exception'] = $e;
 			
 			$code = $this->registry['exception']->getCode();
@@ -207,17 +240,17 @@ class Nu extends CoreLib
 			$this->eRouter->overrideRules = true;
 			
 			$this->output = $this->eRouter->execute();
+		
+			/**
+			 * Love.
+			 */
+			$this->output->render();
 		}
 		
 		/**
-		 * Love.
+		 * All's well that ends well.
 		 */
-		$this->output->render();
-		
-		/**
-		 * Ending the Request.
-		 */
-		flush();
+		$this->end();
 	}
 	
 	public function setConfig($configFile)
@@ -254,6 +287,11 @@ class Nu extends CoreLib
 		}
 	}
 	
-	
+	private function end()
+	{
+		ob_end_flush();
+		flush();
+		exit(0);
+	}
 }
 ?>
