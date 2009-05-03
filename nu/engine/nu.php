@@ -129,9 +129,14 @@ class Nu extends CoreLib
 				$this->routeRules = new RouteRules($this->registry);
 			}
 			
-			#IS THIS REQUEST CACHEABLE
-			$isCacheable = ($this->config->useCaching && 
-							($this->routeRules->matchedRule['cache'] == true 
+			/**
+			 * Caching Pre-conditions
+			 * do not cache when there is no route match
+			 * the matched rule should implements caching
+			 */
+			$isCacheable = ($this->routeRules->match
+							&& $this->config->useCaching
+							&& ($this->routeRules->matchedRule['cache'] == true 
 							|| is_array($this->routeRules->matchedRule['cache'])));
 			
 			#EXECUTE ANY CACHING
@@ -141,7 +146,6 @@ class Nu extends CoreLib
 				if($this->cache->valid)
 				{
 					$this->cache->outputCache();
-					
 					#End properly now that we have output.
 					$this->end();
 				}
@@ -216,13 +220,7 @@ class Nu extends CoreLib
 			
 		}
 		catch(Exception $e)
-		{
-			#stop any ongoing caching
-			if(isset($this->cache))
-			{
-				ob_end_flush();
-			}
-			
+		{			
 			$this->registry['exception'] = $e;
 			
 			$code = $this->registry['exception']->getCode();
