@@ -1,3 +1,32 @@
 #summary Application Model Classes.
+#labels Phase-Implementation
 
-Soon..
+===Location===
+{{{./nu/application/model/}}}
+
+===File===
+{{{[ModelName].model.php}}}
+
+Your model class name should have '.controller.php' suffix, for Linux users this is case-sensitive, to be on the safe side, use case-sensitive naming.
+
+===Class===
+{{{class User extends BaseModel}}}
+
+Your model class should extend `BaseModel` and should have the default action `public function initialize(){}`.
+
+  ====Sample====
+  {{{
+  class User extends BaseModel
+  {
+      public function initialize()
+      {
+          return;
+      }
+  }
+  }}}
+
+  In this function, you can initialize any data to be used before the queries. Your models can contain any type of method you wish, as long as it only handles database processes for your applications.
+
+  ====Database Connection====
+  {{{$this->DB}}}
+  Your database connection, with properties defined in the configuration file, shall be available through this variable.
