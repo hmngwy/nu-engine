@@ -50,7 +50,7 @@ Note: once the router finds a match in the route rules with the requested URI, i
 Use the {{{$this->addRoute($array)}}} method, wherein the $array argument is an associative array with the following format.
 
 || *key* || *sample value* || *default value* || *definition* ||
-|| url || array('Home', 'index') || n/a || this defines that this route is under /Home/index ||
+|| url || array('works', 'february') || n/a || this defines that this route is under the URL /works/february ||
 || controller || 'Home' || n/a || this defines that this route shall use the 'Home' Controller ||
 || action || 'index' || n/a || this defines that this route shall use the action 'index' under the defined controller ||
 || methods || array('get', 'post')/'all' || 'all' || this defines what methods shall this route accept ||
