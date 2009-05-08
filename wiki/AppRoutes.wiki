@@ -16,7 +16,7 @@ A class named *Routes* should be defined in your routes file, the engine will in
 
 NOTE: there must be a {{{public function initialize()}}} defined in this Class, this will be the function that will contain the Routes definitions.
 
-===Usage of Route Rules===
+====Sample====
 {{{
 class RouteRules extends BaseRouteRules
 {
@@ -46,7 +46,7 @@ class RouteRules extends BaseRouteRules
 
 Note: once the router finds a match in the route rules with the requested URI, it will stop traversing the router rules array.
 
-====To Add a Route====
+===To Add a Route===
 Use the {{{$this->addRoute($array)}}} method, wherein the $array argument is an associative array with the following format.
 
 || *key* || *sample value* || *default value* || *definition* ||
@@ -55,7 +55,7 @@ Use the {{{$this->addRoute($array)}}} method, wherein the $array argument is an 
 || action || 'index' || n/a || this defines that this route shall use the action 'index' under the defined controller ||
 || methods || array('get', 'post')/'all' || 'all' || this defines what methods shall this route accept ||
 || cache || boolean || false || this tells the engine whether to cache this routes response or not when the caching is enabled in the configuration. ||
-*Sample*
+*Sample Argument*
 {{{
 array(
 	'url' => array(''),
@@ -66,7 +66,7 @@ array(
 )
 }}}
 
-====Special Keywords====
+===Special Keywords===
 Enclosing keywords in the url definition with curly brackets ( { or } ) shall make the corresponding value in that slot to be called in as an argument when the action is invoked.
 {{{
 array(
@@ -77,7 +77,7 @@ array(
 }}}
 In the above example, if we request /hello, the Action invoked shall be called in with an argument like so {{{Home:index('hello')}}}, and thus, in the Controller file, the action should be defined like {{{public function index($var)}}}.
 
-====Dynamic Controller::action====
+===Dynamic Controller::action===
 To enable dynamic Controllers or actions, you must use special keywords to tell the route from which slot of the URL will the Controller name will be taken.
 {{{
 array(
