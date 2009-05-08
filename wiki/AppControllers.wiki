@@ -7,7 +7,7 @@
 ===File===
 {{{[ControllerName].controller.php}}}
 
-Your controller class name should match the filename with '.controller.php' suffix, for Linux users this is case-sensitive, to be on the safe side, use case-sensitive naming.
+Your controller class name should have '.controller.php' suffix, for Linux users this is case-sensitive, to be on the safe side, use case-sensitive naming.
 
 ===Class===
 {{{class Home extends BaseController}}}
