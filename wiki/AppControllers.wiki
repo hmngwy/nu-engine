@@ -44,7 +44,7 @@ So for example, if `$this->view->load('page');` in any Action under `Home` Contr
 {{{
 ./nu/application/view/Home/page.view.php
 }}}
-To load a Global View file (View files under the ./view/_global/ dir), use `true` as second parameter for the load function like so {{{$this->view->load('page,', true);}}}
+To load a Global View file (View files under the ./view/_global/ directory), use `true` as second parameter for the load function like so {{{$this->view->load('page,', true);}}}
 
 If the View file exists, it's content will be in 
 {{{
