@@ -13,54 +13,47 @@ Nu Engine will load the routes file {{{routes.php}}} by default. You can name th
 ===Class===
 A class named *Routes* should be defined in your routes file, the engine will instantiate this class itself and use its properties, the instance will then be passed on to the router class for parsing.
 
-===Properties===
-|| *variable* || *data type* || *description* || *sample values* || 
-|| $rules || String Array || holds the route rules ||   ||
+NOTE: there must be a {{{public function initialize()}}} defined in this Class, this will be the function that will contain the Routes definitions.
 
 ===Usage of $rules===
 {{{
-public $rules = array(
-	
-	array(
-		'url' => array('home'),
-		'controller' => 'Home',
-		'action' => 'index'	
-	),
-	
-	array(
-		'url' => array('another', 'page'),
-		'controller' => 'Home',
-		'action' => 'page'	
-	),
-	
-	array(
-		'url' => array('open', '{action}'),
-		'controller' => 'Home'
-	),
-	
-	array(
-		'url' => array('{controller}', '{action}')
-	),
-	
-	array(
-		'url' => array('receive', '{key}'),
-		'controller' => 'Receive',
-		'action' => 'index'	
-	)
-	
-);
+class RouteRules extends BaseRouteRules
+{
+	public function initialize()
+	{
+		$this->addRoute(
+			array(
+				'url' => array(''),
+				'controller' => 'Home',
+				'action' => 'index',
+				'methods' => array('get', 'post'),
+				'cache' => true
+			)
+		);
+		
+		$this->addRoute(
+			array(
+				'url' => array('{controller}', '{action}'),
+				'controller' => '{controller}',
+				'action' => '{action}',
+				'methods' => 'all'
+			)
+		);
+	}
+}
 }}}
-In this example, the first rule invokes Home::index() when {{{/home}}} is accessed, and the second rule invokes Home::page() when {{{/another/page}}} is accessed.
-
-The third rule uses the special {action} keyword to dynamically tell the router to invoke the action with the name that happens to be in that part of the URI, so for example we access {{{/open/page}}}, Home::page() is invoked. 
-
-The fourth rule uses both {controller} and {action} special keywords to dynamically tell the router to use the strings that happen to be in same part of the URI as the controller and action names to invoke.
-
-The last rule uses the argument format that tells the router to use the string in that part of the URI as an argument when invoking the action indicated in the same rule. If we access {{{/receive/1234}}}, Receive::index('1234') is invoked.
-
-You can use any combination of these features.
 
 Note: once the router finds a match in the route rules with the requested URI, it will stop traversing the router rules array.
+
+====To add a route====
+Use the {{{$this->addRoute($array)}}} method, wherein the $array argument is an associative array with the following format.
+
+|| key || sample || definition ||
+|| url || array('Home', 'index') || this defines that this route is under /Home/index ||
+|| controller || 'Home' || this defines that this route shall use the 'Home' Controller ||
+|| action || 'index' || this defines that this route shall use the action 'index' under the defined controller ||
+|| methods || array('get', 'post')/'all' || this defines what methods shall this route accept ||
+|| cache || boolean || this tells the engine whether to cache this routes response or not when the caching is enabled in the configuration. ||
 
 ===Methods===
 ====public function `__`construct()====
