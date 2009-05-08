@@ -29,7 +29,7 @@ A class named *Config* should be defined in your configuration file, the engine 
 || $helpers || String Array || helpers that will be loaded once controller has been resolved and instanciated || {{{array('database')}}} ||
 || $models || String Array || models that will be loaded once controller has been resolved and instanciated || {{{array('users', 'orders')}}} ||
 || $exceptionController || String || Controller to use for exception/error responses || {{{'Server'}}} ||
-|| $exceptionCodes || String Associative Array || corresponding actions for expected error codes that can be thrown || {{{array( 400 => 'bad_request' )}}} ||
+|| $exceptionCodes || Associative String Array || corresponding actions for expected error codes that can be thrown || {{{array( 400 => 'bad_request' )}}} ||
 
 You may add more properties to this class that aren't defined in this document.
 
