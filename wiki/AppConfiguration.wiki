@@ -17,6 +17,8 @@ A class named *Config* should be defined in your configuration file, the engine 
 || $debug || Boolean || if true, will turn on error reporting ||  ||
 || $debugLevel || Integer || sets the debug level for error reporting || {{{E_ALL ^ E_NOTICE}}} ||
 || $maintenance || Boolean || if true, engine will throw a maintenance exception and all pages shall display an "undergoing maintenance" page || ||
+|| $useCaching|| Boolean || if true, engine will cache responses for routes that implement it || ||
+|| $cacheLifeTime || Integer|| expiration of a cached response in seconds || ||
 || $usingDB || Boolean || if true, engine will create a database connection and pass it onto the $registry variable || ||
 || $usingPDO || Boolean || if true, engine will create the database connection using PDO || ||
 || $dbConn || String Array || database connection variables || {{{array( 'host' => 'localhost', 'name' => 'nuengine', 'pass' => 'secret', 'user' => 'root', 'port' => '3306')}}} ||
@@ -24,7 +26,10 @@ A class named *Config* should be defined in your configuration file, the engine 
 || $memcacheConn || String Array || memcache connection variables || {{{array( 'host' => 'localhost', 'port' => '11211')}}} ||
 || $domain || String || the domain name where the application is located || ||
 || $plugins || String Array || plugins that will be loaded once engine has run || {{{array('templater')}}} ||
-|| $helpers || String Array || helpers that will be loaded once engine has run || {{{array('database')}}} ||
+|| $helpers || String Array || helpers that will be loaded once controller has been resolved and instanciated || {{{array('database')}}} ||
+|| $models || String Array || models that will be loaded once controller has been resolved and instanciated || {{{array('users', 'orders')}}} ||
+|| $exceptionController || String || Controller to use for exception/error responses || {{{'Server'}}} ||
+|| $exceptionCodes || String Associative Array || corresponding actions for expected error codes that can be thrown || {{{array( 400 => 'bad_request' )}}} ||
 
 You may add more properties to this class that aren't defined in this document.
 
