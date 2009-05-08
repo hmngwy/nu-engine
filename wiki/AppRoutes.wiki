@@ -16,7 +16,7 @@ A class named *Routes* should be defined in your routes file, the engine will in
 
 NOTE: there must be a {{{public function initialize()}}} defined in this Class, this will be the function that will contain the Routes definitions.
 
-===Usage of $rules===
+===Usage of RouteRules===
 {{{
 class RouteRules extends BaseRouteRules
 {
