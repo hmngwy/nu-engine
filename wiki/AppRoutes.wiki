@@ -1,4 +1,5 @@
 #summary Application URL Routes.
+#labels Phase-Implementation
 
 The routes file defines which controller-action corresponds to a certain request, like for example, by default '/' invokes the {{{index}}} action from {{{Home}}} controller.
 
@@ -45,21 +46,47 @@ class RouteRules extends BaseRouteRules
 
 Note: once the router finds a match in the route rules with the requested URI, it will stop traversing the router rules array.
 
-====To add a route====
+====To Add a Route====
 Use the {{{$this->addRoute($array)}}} method, wherein the $array argument is an associative array with the following format.
 
-|| key || sample || definition ||
-|| url || array('Home', 'index') || this defines that this route is under /Home/index ||
-|| controller || 'Home' || this defines that this route shall use the 'Home' Controller ||
-|| action || 'index' || this defines that this route shall use the action 'index' under the defined controller ||
-|| methods || array('get', 'post')/'all' || this defines what methods shall this route accept ||
-|| cache || boolean || this tells the engine whether to cache this routes response or not when the caching is enabled in the configuration. ||
+|| *key* || *sample value* || *default value* || *definition* ||
+|| url || array('Home', 'index') || n/a || this defines that this route is under /Home/index ||
+|| controller || 'Home' || n/a || this defines that this route shall use the 'Home' Controller ||
+|| action || 'index' || n/a || this defines that this route shall use the action 'index' under the defined controller ||
+|| methods || array('get', 'post')/'all' || 'all' || this defines what methods shall this route accept ||
+|| cache || boolean || false || this tells the engine whether to cache this routes response or not when the caching is enabled in the configuration. ||
+*Sample*
+{{{
+array(
+	'url' => array(''),
+	'controller' => 'Home',
+	'action' => 'index',
+	'methods' => array('get', 'post'),
+	'cache' => true
+)
+}}}
 
-===Methods===
-====public function `__`construct()====
-  The construction function for your routes class, this is useful if you want to set route rule values dynamically.
+====Special Keywords====
+Enclosing keywords in the url definition with curly brackets ( { or } ) shall make the corresponding value in that slot to be called in as an argument when the action is invoked.
+{{{
+array(
+	'url' => array('{var}'),
+	'controller' => 'Home',
+	'action' => 'index'
+)
+}}}
+In the above example, if we request /hello, the Action invoked shall be called in with an argument like so {{{Home:index('hello')}}}, and thus, in the Controller file, the action should be defined like {{{public function index($var)}}}.
 
-  =====Parameters=====
-  _none_
+====Dynamic Controller::action====
+To enable dynamic Controllers or actions, you must use special keywords to tell the route from which slot of the URL will the Controller name will be taken.
+{{{
+array(
+	'url' => array('{var}'),
+	'controller' => '{var}',
+	'action' => 'index'
+)
+}}}
+In the above example, if we request /Home, the Controller action that will be invoked shall be {{{Home::index()}}}, the same behavior can be expected if we used keywords in the action definition.
+
 
 {{{#NOTHING FOLLOWS}}}
