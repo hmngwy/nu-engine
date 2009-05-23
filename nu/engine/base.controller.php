@@ -76,14 +76,14 @@ abstract class BaseController extends CoreLib
 	
 	public function loadModel($name, $handle=false)
 	{
-		include MODELDIR.'/'.$name.'.model.php';
+		include_once MODELDIR.'/'.$name.'.model.php';
 		if($handle === false)
 		{
-			$this->model->$name = new $name();			
+			$this->model->$name = new $name($this->registry);			
 		}
 		else
 		{
-			$this->model->$handle = new $name();	
+			$this->model->$handle = new $name($this->registry);	
 		}
 	}
 	

@@ -109,8 +109,28 @@ class Config extends CoreLib
 	 */
 	public $helpers = array();
 	
+	/**
+	 * models to autoload
+	 *
+	 * @access public
+	 * @var mixed
+	 */
+	public $models = array();
+	
+	/**
+	 * controller to use for Exception Responses
+	 * 
+	 * @access public
+	 * @var string
+	 */
 	public $exceptionController = 'Server';
 	
+	/**
+	 * corresponding actions for error codes (http errors)
+	 *
+	 * @access public
+	 * @var mixed
+	 */
 	public $exceptionCodes = array( 400 => 'bad_request',
 									404 => 'not_found',
 									503 => 'service_unavailable',
@@ -118,7 +138,9 @@ class Config extends CoreLib
 	
 	public function __construct()
 	{	
-		#YOU CAN WRITE ANYTHING HERE
+		# YOU CAN WRITE ANYTHING HERE
+		# GO CRAZY
+		
 		/**
 		 * hopefully disables register_globals.
 		 */
