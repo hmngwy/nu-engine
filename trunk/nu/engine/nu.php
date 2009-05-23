@@ -287,7 +287,10 @@ class Nu extends CoreLib
 	
 	private function end()
 	{
-		ob_end_flush();
+		if(ob_get_contents() != false)
+		{
+			ob_end_flush();			
+		}
 		flush();
 		exit(0);
 	}

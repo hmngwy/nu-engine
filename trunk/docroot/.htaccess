@@ -1,5 +1,10 @@
-Options +FollowSymLinks
+#SymLinks: Uncomment line below if you want to enable symlinks
+#Options +FollowSymLinks
 
+#Index Listing: Uncomment line below if you want to disable directory listing
+#Options -Indexes
+
+# IMPORTANT STUFF YOU MIGHT NOT WANT TO TOUCH
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f

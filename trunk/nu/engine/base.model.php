@@ -42,11 +42,11 @@ abstract class BaseModel extends CoreLib {
 	 * to be defined at the least.
 	 *
 	 * @access public
- 	 * @param PDO $DB
 	 * @return void
 	 **/
     function __construct($registry) {
     	$this->registry = $registry;
+    	$this->DB = $registry['db'];
     	$this->initialize();
     }
     
