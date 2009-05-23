@@ -208,11 +208,6 @@ class Nu extends CoreLib
 			 * Executing the request.
 			 */
 			$this->output = $this->router->execute();
-		
-			/**
-			 * Love.
-			 */
-			$this->output->render();
 			
 			if($isCacheable)
 				if(!$this->cache->valid)
@@ -239,12 +234,15 @@ class Nu extends CoreLib
 			
 			$this->output = $this->eRouter->execute();
 		
-			/**
-			 * Love.
-			 */
-			$this->output->render();
+			
 		}
 		
+		/**
+		 * Love.
+		 */
+		if(isset($this->output))
+			$this->output->render();
+			
 		/**
 		 * All's well that ends well.
 		 */

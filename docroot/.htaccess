@@ -1,12 +1,25 @@
-#SymLinks: Uncomment line below if you want to enable symlinks
-#Options +FollowSymLinks
+# Follows SymLinks, so we don't rewrite SymLinks
+Options +FollowSymLinks
 
-#Index Listing: Uncomment line below if you want to disable directory listing
-#Options -Indexes
+# Disables Directory Listing
+Options -Indexes
 
-# IMPORTANT STUFF YOU MIGHT NOT WANT TO TOUCH
-RewriteEngine On
+# Rewrite Rules
+<IfModule mod_rewrite.c>
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . index.php
+	RewriteEngine On
+	
+	# If you plan to use NU-Engine under a subdirectory,
+	# then you should change this to point to that subdirectory.
+	RewriteBase /
+	
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_URI} !(.*)/$
+	RewriteRule ^(.*)$ $1/ [L,R=301] 
+	
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php [L] 
+
+</IfModule>
