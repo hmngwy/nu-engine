@@ -89,7 +89,7 @@ abstract class BaseRouteRules extends CoreLib
 	
 	public function setParams($arguments)
 	{
-		$this->params = $params;
+		$this->params = $arguments;
 	}
 	
 	private function isMatch($rule)
