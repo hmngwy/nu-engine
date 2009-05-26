@@ -79,7 +79,8 @@ class Nu extends CoreLib
 		$this->registry = new Registry();
 	}
 	
-	public function run(){
+	public function run()
+	{
 		
 		try
 		{
@@ -101,7 +102,7 @@ class Nu extends CoreLib
 			/**
 			 * Registering the request instance
 			 */
-			$this->registry['request'] = new Request($this->config->domain);
+			$this->registry['request'] = new Request($this->config);
 			
 			/**
 			 * THROWS MAINTENANCE EXCEPTION (HTTP/1.1 503 Service Unavaible)
@@ -209,10 +210,6 @@ class Nu extends CoreLib
 			 */
 			$this->output = $this->router->execute();
 			
-			if($isCacheable)
-				if(!$this->cache->valid)
-					$this->cache->end();
-			
 		}
 		catch(Exception $e)
 		{			
@@ -220,6 +217,7 @@ class Nu extends CoreLib
 			
 			$code = $this->registry['exception']->getCode();
 			
+			# Store the Original Route
 			$this->registry['oRoute'] = $this->registry['route'];
 			
 			$this->registry->remove('route');
@@ -242,6 +240,10 @@ class Nu extends CoreLib
 		 */
 		if(isset($this->output))
 			$this->output->render();
+			
+		if($isCacheable)
+			if(!$this->cache->valid)
+				$this->cache->end();
 			
 		/**
 		 * All's well that ends well.

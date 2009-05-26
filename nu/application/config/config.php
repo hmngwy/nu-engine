@@ -136,6 +136,8 @@ class Config extends CoreLib
 									503 => 'service_unavailable',
 									500 => 'internal_server_error');
 	
+	public $baseURL = '/';								
+									
 	public function __construct()
 	{	
 		# YOU CAN WRITE ANYTHING HERE

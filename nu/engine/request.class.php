@@ -16,12 +16,17 @@ class Request extends CoreLib
 		$this->subdomain = $this->parse_subdomain($config->domain);
 		$this->post = $_POST;
 		$this->get = $_GET;
-		$this->request_headers = (function_exists('getallheaders')) ? getallheaders() : array() ;
+		$this->files = $_FILES;
+		$this->request_headers = (function_exists('getallheaders')) ? getallheaders() : array('getallheaders is not installed');
 	}
 	
 	private function parse_request_uri()
 	{
-		$request_uri = str_replace(substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')),'',$_SERVER['REQUEST_URI']);
+		$request_uri = str_replace(
+			substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')), 
+			'',
+			$_SERVER['REQUEST_URI']
+		);
 		
 		$querypos = strpos($request_uri, '?');
 		if ($querypos !== false) {
@@ -36,7 +41,7 @@ class Request extends CoreLib
 		}
 		
 		$request = explode('/', $request_uri);
-		array_shift($request); #REMOVE FIRST ELEMENT (always blank)
+		if($request_uri[0]=='/') array_shift($request); #REMOVE FIRST ELEMENT (always blank)
 		
 		$request_len = count($request);
 		
