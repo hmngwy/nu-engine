@@ -34,7 +34,7 @@ class Cache extends CoreLib
 		fwrite($fp, $outputString); 
 		fclose($fp);
 		
-		ob_end_flush();
+		#ob_end_flush();
 	}
 	
 	public function outputCache($return=false)

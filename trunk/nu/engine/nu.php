@@ -143,6 +143,7 @@ class Nu extends CoreLib
 			#EXECUTE ANY CACHING
 			if($isCacheable)
 			{
+				#die(md5($_SERVER['REQUEST_URI']));
 				$this->cache = new Cache(md5($_SERVER['REQUEST_URI']), $this->config->cacheLifeTime);
 				if($this->cache->valid)
 				{
@@ -241,10 +242,10 @@ class Nu extends CoreLib
 		if(isset($this->output))
 			$this->output->render();
 			
+		#STORE CACHE IF CACHEABLE
 		if($isCacheable)
 			if(!$this->cache->valid)
 				$this->cache->end();
-			
 		/**
 		 * All's well that ends well.
 		 */

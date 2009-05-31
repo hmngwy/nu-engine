@@ -10,8 +10,9 @@ Options -Indexes
 	RewriteEngine On
 	
 	# If you plan to use NU-Engine under a subdirectory,
-	# then you should change this to point to that subdirectory.
-	RewriteBase /nu-engine/docroot/
+	# then you should change this to point to that subdirectory,
+	# otherwise you'll have problem with relative linking images/files.
+	RewriteBase /
 	
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
