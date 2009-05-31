@@ -40,7 +40,7 @@ class View extends CoreLib
 	
     public function getContent()
     {
-    	return $content;
+    	return $this->content;
     }
 	
     

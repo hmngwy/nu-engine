@@ -28,7 +28,7 @@ class Output
 		switch($this->mode)
 		{
 			case 'e':
-				echo $this->view->content;
+				echo $this->view->getContent();
 				break;
 				
 			case 'i':
