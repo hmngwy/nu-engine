@@ -47,7 +47,6 @@ abstract class BaseModel extends CoreLib {
     function __construct($registry) {
     	$this->registry = $registry;
     	$this->DB = $registry['db'];
-    	$this->initialize();
     }
     
     /**

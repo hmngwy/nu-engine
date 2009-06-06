@@ -225,7 +225,9 @@ class Nu extends CoreLib
 			
     		$this->registry['route'] = array('match'		=> true,
     										 'controller'	=> $this->config->exceptionController,
-											 'action'		=> $this->config->exceptionCodes[$code],
+											 'action'		=> isset($this->config->exceptionCodes[$code]) ? 
+											 					$this->config->exceptionCodes[$code] : 
+											 					$this->config->exceptionCodes[500],
 											 'params'		=> array());
     		
 			$this->eRouter = new Router($this->registry);
@@ -233,7 +235,6 @@ class Nu extends CoreLib
 			
 			$this->output = $this->eRouter->execute();
 		
-			
 		}
 		
 		/**

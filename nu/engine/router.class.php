@@ -90,6 +90,18 @@ class Router extends CoreLib
 		}
 		
 	}
+	
+	private function isKeyword($string)
+	{
+		if(isset($string[0]))
+		{
+			if($string[0] === '{')
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 ?>

@@ -57,18 +57,6 @@ abstract class CoreLib
 		}
 	}
 	
-	public function isKeyword($string)
-	{
-		if(isset($string[0]))
-		{
-			if($string[0] === '{')
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public function debug($var)
 	{
 		die('<pre>'.var_dump($var).'</pre>');

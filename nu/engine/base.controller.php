@@ -56,7 +56,7 @@ abstract class BaseController extends CoreLib
     	
 		foreach($this->config->helpers as $helper)
 		{
-			$this->load_helper($helper);
+			$this->loadHelper($helper);
 		}
     }
     
@@ -74,17 +74,22 @@ abstract class BaseController extends CoreLib
     	return $output;
     }
 	
-	public function loadModel($name, $handle=false)
+	public function loadModel($name, $handle=false, $params=false)
 	{
 		include_once MODELDIR.'/'.$name.'.model.php';
 		if($handle === false)
 		{
-			$this->model->$name = new $name($this->registry);			
+			$this->model->$name = new $name($this->registry);
+			$instance = $name;			
 		}
 		else
 		{
 			$this->model->$handle = new $name($this->registry);	
+			$instance = $handle;
 		}
+		
+		if($params!=false) call_user_func_array(array($this->model->$instance, 'initialize'), $params);
+		else $this->model->$instance->initialize();
 	}
 	
 	public function loadModels()
@@ -98,18 +103,23 @@ abstract class BaseController extends CoreLib
 		$d->close();
 	}
 	
-	public function loadHelper($name, $handle=false)
+	public function loadHelper($name, $handle=false, $params)
 	{
 		include_once HELPERDIR.'/'.$name.'/'.$name.'.helper.php';
 		
 		if($handle === false)
 		{
-			$this->helper->$name = new $name();			
+			$this->helper->$name = new $name();		
+			$instance = $name;				
 		}
 		else
 		{
 			$this->helper->$handle = new $name();	
+			$instance = $handle;
 		}
+		
+		if($params!=false) call_user_func_array(array($this->helper->$instance, 'initialize'), $params);
+		else $this->helper->$instance->initialize();
 	}
 
 	/**
