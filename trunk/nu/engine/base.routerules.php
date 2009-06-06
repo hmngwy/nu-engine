@@ -191,6 +191,18 @@ abstract class BaseRouteRules extends CoreLib
 			$this->setAction('unknown_error');
 
 	}
+	
+	private function isKeyword($string)
+	{
+		if(isset($string[0]))
+		{
+			if($string[0] === '{')
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 ?>
