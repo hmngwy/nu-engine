@@ -36,7 +36,7 @@ class Router extends CoreLib
 	{
 		if($this->route['match'] === true || $this->overrideRules === true)
 		{
-			$controllerfile = CONTROLLERDIR.'/'.$this->route['controller'].'.controller.php';
+			$controllerfile = CONTROLLERDIR.'/'.ucwords($this->route['controller']).'.controller.php';
 
 			# CHECK IF FILE IS READABLE
 			if(is_readable($controllerfile))

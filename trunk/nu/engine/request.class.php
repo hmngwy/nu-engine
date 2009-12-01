@@ -48,7 +48,7 @@ class Request extends CoreLib
 		if($request_len>1) #REMOVE LAST EMPTY ELEMENT IF IT EXISTS
 		if($request[$request_len-1]=='')
 			unset($request[$request_len-1]);
-		foreach($request as &$r) $r = strtolower($r);
+		#foreach($request as &$r) $r = strtolower($r);
 		
 		return $request;
 	}

@@ -128,7 +128,7 @@ abstract class BaseController extends CoreLib
 	 * @abstract function index
 	 * @return string
 	 **/
-    abstract function index();
+    #abstract function index();
 } //END abstract class base_controller
 
 ?>
