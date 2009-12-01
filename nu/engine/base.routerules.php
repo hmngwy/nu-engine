@@ -23,7 +23,7 @@ abstract class BaseRouteRules extends CoreLib
 	public $match;
 	public $controller;
 	public $action;
-	public $params;
+	public $params = array();
 	public $matchedRule;
 	
 	public function __construct($registry, $deferInit = false)
