@@ -32,6 +32,8 @@ abstract class BaseController extends CoreLib
     
     public $model;
     
+    public $tuple;
+    
     public $view;
     
 	/**
@@ -74,22 +76,28 @@ abstract class BaseController extends CoreLib
     	return $output;
     }
 	
-	public function loadModel($name, $handle=false, $params=false)
+	public function loadModel($name, $instanciate = false, $params=false, $handle=false)
 	{
 		include_once MODELDIR.'/'.$name.'.model.php';
-		if($handle === false)
+		
+		if($instanciate == true)
 		{
-			$this->model->$name = new $name($this->registry);
-			$instance = $name;			
-		}
-		else
-		{
-			$this->model->$handle = new $name($this->registry);	
-			$instance = $handle;
+			if($handle === false)
+			{
+				$this->model->$name = new $name($this->registry);
+				$instance = $name;			
+			}
+			else
+			{
+				$this->model->$handle = new $name($this->registry);	
+				$instance = $handle;
+			}
+			
+			$params[] = $this->registry;
+			call_user_func_array(array($this->model->$instance, $instance), $params);
+			
 		}
 		
-		if($params!=false) call_user_func_array(array($this->model->$instance, 'initialize'), $params);
-		else $this->model->$instance->initialize();
 	}
 	
 	public function loadModels()
@@ -98,6 +106,41 @@ abstract class BaseController extends CoreLib
 		while (false !== ($filename = $d->read())) { 
 			 if (($modelname = substr($filename, -10)) == '.model.php') { 
 			 	$this->loadModel($modelname);
+			 } 
+		} 
+		$d->close();
+	}
+	
+	public function loadTuple($name, $instanciate = false, $params=false, $handle=false)
+	{
+		include_once MODELDIR.'/'.$name.'.tuple.php';
+		
+		if($instanciate == true)
+		{
+			if($handle === false)
+			{
+				$this->tuple->$name = new $name($this->registry);
+				$instance = $name;			
+			}
+			else
+			{
+				$this->tuple->$handle = new $name($this->registry);	
+				$instance = $handle;
+			}
+			
+			$params[] = $this->registry;
+			call_user_func_array(array($this->tuple->$instance, $instance), $params);
+			
+		}
+		
+	}
+	
+	public function loadTuples()
+	{
+		$d = dir(MODELDIR); 
+		while (false !== ($filename = $d->read())) { 
+			 if (($modelname = substr($filename, -10)) == '.tuple.php') { 
+			 	$this->loadTuple($modelname);
 			 } 
 		} 
 		$d->close();

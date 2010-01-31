@@ -31,6 +31,7 @@ include ENGINEDIR.'/registry.class.php';
 include ENGINEDIR.'/view.class.php';
 include ENGINEDIR.'/output.class.php';
 include ENGINEDIR.'/base.model.php';
+include ENGINEDIR.'/base.tuple.php';
 include ENGINEDIR.'/base.controller.php';
 include ENGINEDIR.'/base.routerules.php';
 include ENGINEDIR.'/request.class.php';
@@ -163,9 +164,16 @@ class Nu extends CoreLib
 			 */
 			if($this->config->usingDB)
 			{
-				$DBCONN = mysql_connect($this->config->dbConn['host'], $this->config->dbConn['user'], $this->config->dbConn['pass']);
-				mysql_select_db($this->config->dbConn['name']);
-				$this->registry->set('db', $DBCONN);
+				if(!$this->config->usePDO)
+				{
+					$DBCONN = mysql_connect($this->config->dbConn['host'], $this->config->dbConn['user'], $this->config->dbConn['pass']);
+					mysql_select_db($this->config->dbConn['name']);
+					$this->registry->set('db', $DBCONN);
+				}
+				else
+				{
+					$DBCONN = new PDO('mysql:dbname='.$this->config->dbConn['name'].';host='.$this->config->dbConn['host'], $this->config->dbConn['user'], $this->config->dbConn['pass']);
+				}
 			}
 			
 			/**
